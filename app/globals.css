@@ -16,3 +16,39 @@ body {
 .navbar {
   transition: transform 0.3s ease-in-out;
 }
+
+/* Job Listings Container */
+.jobs-container {
+  @apply p-5;
+  font-family: Arial, sans-serif;
+}
+
+/* Error Message */
+.error-message {
+  @apply text-red-600 font-bold;
+}
+
+/* Job Listings Layout */
+.job-listings {
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mt-5;
+}
+
+/* Job Card Styles */
+.job-card {
+  @apply bg-white border border-gray-200 rounded-lg p-6 shadow-md transition-transform transform hover:scale-105 hover:shadow-lg;
+}
+
+/* Job Title Styling */
+.job-card h2 {
+  @apply text-xl font-semibold text-gray-800;
+}
+
+/* Job Description Styling */
+.job-card p {
+  @apply text-gray-600 text-base mt-3 leading-relaxed;
+}
+
+/* Read More Link Styling */
+.read-more {
+  @apply inline-block mt-4 text-blue-600 font-semibold hover:text-blue-800;
+}

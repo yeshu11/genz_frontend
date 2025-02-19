@@ -1,9 +1,11 @@
 "use client";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import { useState } from "react";
 
 const JobDetails = () => {
   const { id } = useParams(); // Get job ID from URL
+  const [job, setJob] = useState(null);
+  const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,6 +13,24 @@ const JobDetails = () => {
     resume: null,
     message: "",
   });
+
+  // Fetch job details from Rails API
+  useEffect(() => {
+    const fetchJobDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:3001/jobs/${id}`);
+        if (!response.ok) {
+          throw new Error("Failed to fetch job details");
+        }
+        const data = await response.json();
+        setJob(data);
+      } catch (error) {
+        setError("Failed to load job details: " + error.message);
+      }
+    };
+
+    fetchJobDetails();
+  }, [id]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -27,21 +47,24 @@ const JobDetails = () => {
     alert("Your application has been submitted!");
   };
 
+  if (error) {
+    return <p className="text-red-500 text-center mt-4">{error}</p>;
+  }
+
+  if (!job) {
+    return <p className="text-center text-gray-700 mt-4">Loading job details...</p>;
+  }
+
   return (
     <div className="min-h-screen bg-gray-100 p-8 flex items-center justify-center">
       <div className="max-w-3xl bg-white p-6 shadow-xl rounded-lg">
-        <h1 className="text-3xl font-bold text-blue-600">Job Details</h1>
-        <p className="text-gray-700 mt-2">Job ID: {id}</p>
-
-        {/* Job Description */}
+        <h1 className="text-3xl font-bold text-blue-600">{job.title}</h1>
+        <p className="text-gray-600 mt-2 font-semibold">Location: {job.location}</p>
         <div className="mt-6">
           <h2 className="text-2xl font-semibold text-gray-800">Job Description</h2>
-          <p className="text-gray-600 mt-2">
-            We are looking for a talented developer to join our team. Apply now to be part of an exciting journey!
-          </p>
+          <p className="text-gray-600 mt-2">{job.description}</p>
         </div>
-
-        {/* Apply Now Form */}
+        
         <div className="mt-6">
           <h2 className="text-2xl font-semibold text-gray-800">Apply Now</h2>
           <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
