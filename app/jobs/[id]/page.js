@@ -9,12 +9,9 @@ const JobDetails = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
-    phone: "",
     resume: null,
-    message: "",
   });
 
-  // Fetch job details from Rails API
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
@@ -41,10 +38,27 @@ const JobDetails = () => {
     setFormData({ ...formData, resume: e.target.files[0] });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Your application has been submitted!");
+    const formDataObj = new FormData();
+    formDataObj.append("name", formData.name);
+    formDataObj.append("email", formData.email);
+    formDataObj.append("resume_file", formData.resume);
+    formDataObj.append("job_id", id);
+
+    try {
+      const response = await fetch(`http://localhost:3001/jobs/${id}/resumes`, {
+        method: "POST",
+        body: formDataObj,
+      });
+      if (!response.ok) {
+        throw new Error("Failed to submit application");
+      }
+      alert("Your application has been submitted successfully!");
+      setFormData({ name: "", email: "", resume: null });
+    } catch (error) {
+      alert(error.message);
+    }
   };
 
   if (error) {
@@ -68,54 +82,10 @@ const JobDetails = () => {
         <div className="mt-6">
           <h2 className="text-2xl font-semibold text-gray-800">Apply Now</h2>
           <form className="mt-4 space-y-4" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              className="w-full p-3 border rounded-lg"
-              value={formData.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              className="w-full p-3 border rounded-lg"
-              value={formData.email}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="tel"
-              name="phone"
-              placeholder="Your Phone Number"
-              className="w-full p-3 border rounded-lg"
-              value={formData.phone}
-              onChange={handleChange}
-              required
-            />
-            <textarea
-              name="message"
-              placeholder="Why are you interested?"
-              className="w-full p-3 border rounded-lg"
-              value={formData.message}
-              onChange={handleChange}
-            />
-            <input
-              type="file"
-              name="resume"
-              accept=".pdf"
-              className="w-full p-3 border rounded-lg"
-              onChange={handleFileChange}
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition"
-            >
-              Submit Application
-            </button>
+            <input type="text" name="name" placeholder="Your Name" className="w-full p-3 border rounded-lg" value={formData.name} onChange={handleChange} required />
+            <input type="email" name="email" placeholder="Your Email" className="w-full p-3 border rounded-lg" value={formData.email} onChange={handleChange} required />
+            <input type="file" name="resume" accept=".pdf" className="w-full p-3 border rounded-lg" onChange={handleFileChange} required />
+            <button type="submit" className="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition">Submit Application</button>
           </form>
         </div>
       </div>
