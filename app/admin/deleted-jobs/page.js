@@ -1,101 +1,150 @@
 "use client";
-import { useState } from "react";
-
-const deletedJobsData = [
-  {
-    jobTitle: "Frontend Developer",
-    jobId: "101",
-    location: "Bangalore",
-    experience: "2+ years",
-    resumes: [
-      { name: "John Doe", email: "john@example.com", resume: "/resumes/john_doe.pdf" },
-      { name: "Alice Smith", email: "alice@example.com", resume: "/resumes/alice_smith.pdf" },
-    ],
-  },
-  {
-    jobTitle: "Backend Developer",
-    jobId: "102",
-    location: "Mumbai",
-    experience: "3+ years",
-    resumes: [
-      { name: "Michael Brown", email: "michael@example.com", resume: "/resumes/michael_brown.pdf" },
-    ],
-  },
-];
+import { useEffect, useState } from "react";
 
 const DeletedJobs = () => {
+  const [deletedJobs, setDeletedJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
 
-  const handleJobClick = (job) => {
-    setSelectedJob(job);
+  useEffect(() => {
+    fetchDeletedJobs();
+  }, []);
+
+  const fetchDeletedJobs = async () => {
+    try {
+      const response = await fetch("http://localhost:3001/deleted_jobs");
+      if (!response.ok) {
+        throw new Error("Failed to fetch deleted jobs");
+      }
+      const data = await response.json();
+      setDeletedJobs(data);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  const openPdfInNewTab = (url) => {
+    if (url) {
+      window.open(url, "_blank");
+    } else {
+      alert("No resume available");
+    }
+  };
+
+  // ✅ Permanently Delete a Job
+  const deleteJob = async (jobId) => {
+    const confirmDelete = window.confirm("Are you sure you want to permanently delete this job?");
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/deleted_jobs/${jobId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete job");
+      }
+
+      alert("Job permanently deleted");
+      setDeletedJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+      setSelectedJob(null);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
+  };
+
+  // ✅ Restore (Undo) a Deleted Job with Confirmation
+  const restoreJob = async (jobId) => {
+    const confirmRestore = window.confirm("Are you sure you want to restore this job?");
+    if (!confirmRestore) return;
+
+    try {
+      const response = await fetch(`http://localhost:3001/deleted_jobs/${jobId}/restore`, {
+        method: "POST",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to restore job");
+      }
+
+      alert("Job restored successfully");
+      setDeletedJobs((prevJobs) => prevJobs.filter((job) => job.id !== jobId));
+      setSelectedJob(null);
+    } catch (error) {
+      console.error(error);
+      alert(error.message);
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-900 to-blue-600 p-8">
-      <h1 className="text-4xl font-bold text-white">Deleted Jobs' CVs</h1>
-      <p className="text-gray-200 mt-2">
-        Click on a deleted job to view resumes.
-      </p>
+    <div className="p-8">
+      <h1 className="text-3xl font-bold text-center mb-6">Deleted Jobs</h1>
 
-      {/* Deleted Job Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 mt-6">
-        {deletedJobsData.map((job, index) => (
+      <div className="grid grid-cols-3 gap-6">
+        {deletedJobs.map((job) => (
           <div
-            key={index}
-            className="bg-white shadow-md rounded-lg p-4 text-center cursor-pointer transition hover:bg-red-200"
-            onClick={() => handleJobClick(job)}
+            key={job.id}
+            className="p-6 border rounded-lg shadow-lg bg-white hover:bg-gray-100 transition-all duration-200"
           >
-            <h2 className="text-lg font-semibold text-gray-800">{job.jobTitle}</h2>
-            <p className="text-gray-600">{job.location}</p>
-            <p className="text-gray-500">{job.experience}</p>
+            <h2 className="text-lg font-semibold text-center cursor-pointer" onClick={() => setSelectedJob(job)}>
+              {job.title}
+            </h2>
+            <div className="flex justify-center gap-4 mt-3">
+              <button className="text-red-600 hover:underline" onClick={() => deleteJob(job.id)}>
+                Delete
+              </button>
+              <button className="text-green-600 hover:underline" onClick={() => restoreJob(job.id)}>
+                Undo
+              </button>
+            </div>
           </div>
         ))}
       </div>
 
-      {/* Selected Job Resumes */}
       {selectedJob && (
-        <div className="mt-8 p-6 bg-white shadow-lg rounded-lg">
-          <h2 className="text-3xl font-bold text-red-700">
-            {selectedJob.jobTitle} Resumes
-          </h2>
-          <p className="text-gray-600 mt-2">
-            List of resumes submitted for {selectedJob.jobTitle}.
-          </p>
+        <div className="mt-8">
+          <h2 className="text-xl font-semibold mb-4">{selectedJob.title} Details & Resumes</h2>
 
-          {/* Scrollable Resume List */}
-          <div className="mt-4 max-h-64 overflow-y-auto border rounded-lg p-4 bg-gray-100">
-            {selectedJob.resumes.length > 0 ? (
-              <table className="w-full border-collapse">
-                <thead>
-                  <tr className="bg-gray-300 text-gray-800">
-                    <th className="p-2 border">Name</th>
-                    <th className="p-2 border">Email</th>
-                    <th className="p-2 border">Resume</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {selectedJob.resumes.map((resume, index) => (
-                    <tr key={index} className="text-gray-700 text-center">
-                      <td className="p-2 border">{resume.name}</td>
-                      <td className="p-2 border">{resume.email}</td>
-                      <td className="p-2 border">
-                        <a
-                          href={resume.resume}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-red-500 hover:underline"
-                        >
-                          View Resume
-                        </a>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            ) : (
-              <p className="text-center text-gray-500">No resumes available.</p>
-            )}
+          <div className="border p-4 bg-gray-100 rounded-md mb-6">
+            <p><strong>Title:</strong> {selectedJob.title}</p>
+            <p><strong>Company:</strong> {selectedJob.company_name}</p>
+            <p><strong>Location:</strong> {selectedJob.location}</p>
+            <p><strong>Job Type:</strong> {selectedJob.job_type}</p>
+            <p><strong>Salary:</strong> {selectedJob.salary}</p>
+            <p><strong>Description:</strong> {selectedJob.description}</p>
           </div>
+
+          <table className="w-full border-collapse border bg-white shadow-lg">
+            <thead>
+              <tr className="bg-gray-200 text-left">
+                <th className="border p-3">Name</th>
+                <th className="border p-3">Email</th>
+                <th className="border p-3">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {selectedJob.resumes?.length > 0 ? (
+                selectedJob.resumes.map((resume) => (
+                  <tr key={resume.id}>
+                    <td className="border p-3">{resume.name}</td>
+                    <td className="border p-3">{resume.email}</td>
+                    <td className="border p-3">
+                      <button onClick={() => openPdfInNewTab(resume.file_url)} className="text-blue-600 hover:underline">
+                        View Resume
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td className="border p-3 text-center" colSpan="3">
+                    No resumes found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
