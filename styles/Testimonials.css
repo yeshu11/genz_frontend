@@ -1,0 +1,110 @@
+.big-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px; /* Increased padding for more height */
+    background-color: white; /* Outer background color */
+    min-height: 110vh; /* Increased container height */
+    position: relative;
+}
+
+.bg {
+    width: 100%;
+    max-width: 1300px;
+    padding: 50px;
+    border-radius: 15px; /* Rounded corners */
+    background-color: #666; /* Subsection background */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for separation */
+    min-height: 700px; /* More height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push cards lower */
+}
+
+/* Make heading bigger and stylish */
+.title {
+    text-align: center;
+    font-size: 40px; /* Increased font size */
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 30px;
+}
+
+/* Improve description */
+.desc {
+    text-align: center;
+    font-size: 18px;
+    color: white;
+    max-width: 800px;
+    margin: 0 auto 50px;
+}
+
+/* Sliding animation for cards */
+.blocks {
+    display: flex;
+    gap: 50px;
+    overflow: hidden; /* Hide overflowing cards */
+    position: relative;
+}
+
+.slider {
+    display: flex;
+    gap: 50px;
+    animation: slide 10s linear infinite; /* Sliding animation */
+}
+
+/* Card styles */
+.content {
+    width: 100%;
+    max-width: 320px;
+    background-color: white;
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-height: 250px;
+    flex-shrink: 0;
+}
+
+/* Profile image */
+.profile-img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+}
+
+/* Person details */
+.person {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+/* Name & Designation */
+.name {
+    font-weight: bold;
+    font-size: 18px;
+}
+.desig {
+    font-size: 14px;
+    color: gray;
+}
+
+/* Sliding Animation Keyframes */
+@keyframes slide {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}
+
+/* Stop animation when hovering over any card */
+.blocks:hover .slider {
+    animation-play-state: paused;
+}

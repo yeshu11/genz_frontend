@@ -1,0 +1,25 @@
+@keyframes borderAnimation {
+    0% {
+      border-image-source: linear-gradient(90deg, #22c55e, #a855f7);
+    }
+    25% {
+      border-image-source: linear-gradient(180deg, #22c55e, #a855f7);
+    }
+    50% {
+      border-image-source: linear-gradient(270deg, #22c55e, #a855f7);
+    }
+    75% {
+      border-image-source: linear-gradient(360deg, #22c55e, #a855f7);
+    }
+    100% {
+      border-image-source: linear-gradient(90deg, #22c55e, #a855f7);
+    }
+  }
+  
+  .animated-border {
+    border-width: 4px;
+    border-style: solid;
+    border-image-slice: 1;
+    animation: borderAnimation 4s linear infinite;
+  }
+  

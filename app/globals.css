@@ -52,3 +52,17 @@ body {
 .read-more {
   @apply inline-block mt-4 text-blue-600 font-semibold hover:text-blue-800;
 }
+.bg-custom-gradient {
+  background: linear-gradient(rgb(35, 124, 178), rgb(24, 81, 134));
+}
+
+/* globals.css */
+
+/* Curved Section Divider */
+.clip-top {
+  clip-path: ellipse(50% 100% at 50% 0%);
+}
+
+.clip-bottom {
+  clip-path: ellipse(50% 100% at 50% 100%);
+}

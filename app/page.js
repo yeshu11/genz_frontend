@@ -1,9 +1,14 @@
-"use client"; // Enables animations
+"use client";
 
-import Image from "next/image";
 import Navbar from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import Portfolio from "@/components/Portfolio";
+import WeServe from "@/components/WeServe";
+import AboutUs from "@/components/AboutUs";
+import Hero3DModel from "@/components/Hero3DModel";
+import Tilt from "react-parallax-tilt";
+import Testimonials from "@/components/Testimonials";
 
 export default function Home() {
   const [scrollDirection, setScrollDirection] = useState("up");
@@ -27,115 +32,93 @@ export default function Home() {
       <Navbar className={scrollDirection === "down" ? "hidden" : "block"} />
 
       {/* Hero Section */}
-      <motion.div 
-        className="text-white h-screen flex justify-center items-center bg-gradient-to-br from-blue-900 via-purple-800 to-black relative"
+      <motion.div
+        className="relative text-black h-[105vh] flex justify-between items-center bg-custom-gradient px-10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
       >
-        <main className="flex flex-col gap-8 items-center sm:items-start">
-          <motion.h1 
-            className="text-5xl font-extrabold text-center text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 via-red-500 to-purple-600"
-            initial={{ opacity: 0, y: -50 }}
+        <div className="w-full sm:w-2/5">
+          <motion.h1
+            className="text-5xl sm:text-6xl font-extrabold text-white"
+            initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            Welcome to Gen <span className="inline-block text-6xl text-blue-500 animate-bounce">Z</span> Developer
+            Empowering Businesses with Cutting-Edge IT Solutions.
           </motion.h1>
-        </main>
+          <motion.p
+            className="mt-4 text-lg text-gray-200"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            We bridge the gap between technology and business, delivering innovative solutions that drive growth, efficiency, and success.
+          </motion.p>
+        </div>
+
+        <div className="absolute bottom-0 right-0 w-[750px] h-[750px]">
+          <Hero3DModel />
+        </div>
+
+        {/* Curved Divider */}
+        <div className="absolute bottom-0 left-0 w-full">
+          <svg
+            viewBox="0 0 1440 250"
+            className="w-full h-[120px] md:h-[120px] lg:h-[160px]"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            preserveAspectRatio="none"
+          >
+            <path
+              d="M0,160 C480,100 960,200 1440,160 L1440,250 L0,250 Z"
+              fill="rgb(3, 7, 18)" 
+            />
+          </svg>
+        </div>
       </motion.div>
 
       {/* Services Section */}
-      <motion.section 
-        id="services" 
-        className="py-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-8">Our Services</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-12">
-            {["Web Development", "App Development", "Consulting"].map((service, i) => (
-              <motion.div 
-                key={i} 
-                className="bg-white p-6 rounded-lg shadow-lg text-gray-900 hover:scale-105 transform transition-all duration-300"
-                initial={{ opacity: 0, y: 50 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: i * 0.2 }}
-                viewport={{ once: true }}
+      <section className="relative bg-gray-950 text-white text-center py-20">
+        <h2 className="text-4xl font-bold mb-8">Our Services</h2>
+        <div className="flex flex-wrap justify-center gap-6 px-6">
+          {[
+            { title: "Web Development", icon: "🌐" },
+            { title: "App Development", icon: "📱" },
+            { title: "Cloud Solutions", icon: "☁️" },
+            { title: "UI/UX Design", icon: "🎨" }
+          ].map((service, index) => (
+            <Tilt
+              key={index}
+              tiltMaxAngleX={15}
+              tiltMaxAngleY={15}
+              scale={1.08}
+              transitionSpeed={400}
+              className="w-64"
+            >
+              <motion.div
+                className="w-full p-[2px] rounded-[20px] shadow-lg border-2 border-green-500 border-b-purple-500 border-r-purple-500"
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
               >
-                <h3 className="text-xl font-semibold mb-4">{service}</h3>
-                <p>We provide high-quality {service.toLowerCase()} tailored for businesses.</p>
+                <div className="bg-gray-900 rounded-[20px] py-6 px-8 min-h-[300px] flex flex-col justify-center items-center">
+                  <div className="text-5xl">{service.icon}</div>
+                  <h3 className="text-white text-xl font-semibold mt-4">{service.title}</h3>
+                </div>
               </motion.div>
-            ))}
-          </div>
+            </Tilt>
+          ))}
         </div>
-      </motion.section>
+      </section>
 
-      {/* Hiring Section */}
-      <motion.section 
-        id="hiring" 
-        className="py-20 bg-gradient-to-r from-gray-800 via-gray-700 to-gray-800 text-white"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6">Join Our Team</h2>
-          <div className="bg-white p-6 rounded-lg shadow-lg text-gray-900">
-            <h3 className="text-2xl font-semibold mb-4">Submit Your Resume</h3>
-            <form>
-              <input type="text" placeholder="Your Name" className="mb-4 w-full p-2 border rounded-lg" />
-              <input type="email" placeholder="Your Email" className="mb-4 w-full p-2 border rounded-lg" />
-              <input type="file" className="mb-4 w-full p-2 border rounded-lg" />
-              <button className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-all">
-                Submit Application
-              </button>
-            </form>
-          </div>
-        </div>
-      </motion.section>
+      {/* Testimonials Section */}
+      <Testimonials />
 
-      {/* Careers Section */}
-      <motion.section 
-        id="careers" 
-        className="py-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white text-center"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-4xl mx-auto px-6">
-          <h2 className="text-4xl font-bold mb-6">Explore Job Openings</h2>
-          <p className="mb-4 text-gray-300">We are hiring! Check out the available job opportunities.</p>
-          <a href="/careers" target="_blank">
-            <button className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all">
-              View Openings
-            </button>
-          </a>
-        </div>
-      </motion.section>
-
-      {/* Payment Section */}
-      <motion.section 
-        id="payment" 
-        className="py-20 bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 text-white"
-        initial={{ opacity: 0, y: 50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 1 }}
-        viewport={{ once: true }}
-      >
-        <div className="max-w-4xl mx-auto px-6 text-center">
-          <h2 className="text-4xl font-bold mb-6">Secure Payment</h2>
-          <p className="mb-4">Make a secure payment for our services.</p>
-          <button className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-all">
-            Proceed to Payment
-          </button>
-        </div>
-      </motion.section>
+      {/* Other Sections */}
+      <Portfolio />
+      <WeServe />
+      <AboutUs />
     </>
   );
 }
