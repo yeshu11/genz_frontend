@@ -31,10 +31,16 @@ const SuperAdminDashboard = () => {
               Deleted Job’s CV
             </Link>
           </li>
-          {/* New Create Job Link */}
+          {/* Create Job Link */}
           <li>
-            <Link href="/super_admin/create-job" className="block py-2 px-4 bg-blue-600 text-white text-center rounded hover:bg-blue-700 transition">
+            <Link href="/super_admin/create-job" className={`block py-2 px-4 bg-blue-600 text-white text-center rounded hover:bg-blue-700 transition`}>
               + Create Job
+            </Link>
+          </li>
+          {/* New Create Admin Link */}
+          <li>
+            <Link href="/super_admin/create-admin" className={`block py-2 px-4 bg-green-600 text-white text-center rounded hover:bg-green-700 transition`}>
+              + Create Admin
             </Link>
           </li>
         </ul>
