@@ -4,12 +4,16 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Trash2, MoreVertical } from 'lucide-react';
 import axios from 'axios';
+import JobDetailModal from './[id]/page';
+import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
 
 const JobsPage = () => {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(null);
   const [showDelete, setShowDelete] = useState({});
-
+  const [selectedJob, setSelectedJob] = useState(null); // State to track selected job
+  const { darkMode } = useDarkMode(); // Use Global Dark Mode State
+  
   useEffect(() => {
     fetchJobs();
   }, []);
@@ -39,15 +43,17 @@ const JobsPage = () => {
   const toggleDeleteButton = (id) => {
     setShowDelete((prev) => ({
       ...prev,
-      [id]: true
+      [id]: !prev[id] // Toggle visibility on click
     }));
 
-    setTimeout(() => {
-      setShowDelete((prev) => ({
-        ...prev,
-        [id]: false
-      }));
-    }, 10000);
+    if (!showDelete[id]) {
+      setTimeout(() => {
+        setShowDelete((prev) => ({
+          ...prev,
+          [id]: false
+        }));
+      }, 10000); // Hide after 10 seconds
+    }
   };
 
   const truncateDescription = (description) => {
@@ -56,33 +62,37 @@ const JobsPage = () => {
 
   return (
     <div className="jobs-container">
-      <h1>Explore Our Job Openings</h1>
+      <h1 className={`text-3xl font-bold text-center mb-6 ${darkMode ? "text-white" : "text-black"}`}>
+        Explore Our Job Openings
+      </h1>
       {error && <p className="error-message">{error}</p>}
       {jobs !== null && jobs.length === 0 && <p>Currently, No Open Positions</p>}
       
       <div className="job-listings">
         {jobs && jobs.map((job) => (
-          <div className="job-card" key={job.id}>
-            <button onClick={() => toggleDeleteButton(job.id)} className="dots-button">
+          <div className={`job-card ${darkMode ? "dark-mode" : ""}`} key={job.id}>
+            
+            {/* Vertical Dots at Top-Right Corner */}
+            <button onClick={() => toggleDeleteButton(job.id)} className="dots-button absolute top-2 right-2">
               <MoreVertical size={20} />
             </button>
-            
+
             <h2 className="job-title">{job.title}</h2>
             <p className="job-description">{truncateDescription(job.description)}</p>
             
             <div className="card-footer">
-              <motion.a
-                href={`/admin/jobs/${job.id}`}
+              <motion.button
+                onClick={() => setSelectedJob(job.id)}
                 className="read-more"
                 whileHover={{ scale: 1.1, textShadow: "0px 0px 5px rgba(0,0,255,0.5)" }}
               >
                 Read More
-              </motion.a>
+              </motion.button>
               
               <AnimatePresence>
                 {showDelete[job.id] && (
                   <motion.button 
-                    className="delete-button"
+                    className="delete-button absolute bottom-2 right-2"
                     onClick={() => handleDelete(job.id)}
                     initial={{ y: 20, opacity: 0 }}
                     animate={{ y: 0, opacity: 1 }}
@@ -102,50 +112,12 @@ const JobsPage = () => {
           </div>
         ))}
       </div>
-      
-      <style jsx>{`
-        .job-card {
-          position: relative;
-          padding: 15px;
-          border: 1px solid #ccc;
-          border-radius: 8px;
-          margin: 10px 0;
-          transition: all 0.3s ease;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-        }
-        .job-title {
-          word-wrap: break-word;
-          overflow-wrap: break-word;
-        }
-        .dots-button {
-          position: absolute;
-          top: 10px;
-          right: 10px;
-          background: transparent;
-          border: none;
-          cursor: pointer;
-        }
-        .card-footer {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding-top: 10px;
-        }
-        .delete-button {
-          background: none;
-          border: none;
-          cursor: pointer;
-          margin-right: 15px;
-        }
-        .read-more {
-          text-decoration: none;
-          color: blue;
-          font-weight: bold;
-          transition: all 0.3s ease;
-        }
-      `}</style>
+
+      {/* Job Detail Modal */}
+      {selectedJob && (
+        <JobDetailModal jobId={selectedJob} onClose={() => setSelectedJob(null)} refreshJobs={fetchJobs} />
+
+      )}
     </div>
   );
 };

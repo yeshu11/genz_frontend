@@ -1,25 +1,37 @@
 "use client";
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { Home, Briefcase, FileText, Trash2, User, Plus } from "lucide-react";
+import AdminContent from "@/components/AdminContent";
+import DashboardContent from "@/components/Dashboard";
+import ResumeTechwiseContent from "@/components/ResumeTechwise";
+import DeletedJobsContent from "@/components/DeletedJobs";
+import OpenResumesContent from "@/components/OpenResumes";
+import CreateJobContent from "@/components/CreateJob";
+import AdminProfileContent from "@/components/AdminProfile";
+import { Menu, MenuButton } from "@headlessui/react";
+import { MdLogout } from "react-icons/md";
+import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
 
 const AdminDashboard = () => {
   const [admin, setAdmin] = useState(null);
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const { darkMode, toggleDarkMode } = useDarkMode(); // Use Context
   const router = useRouter();
 
   useEffect(() => {
     const storedAdmin = localStorage.getItem("admin");
     if (!storedAdmin) {
-      router.push("/admin/login"); // ✅ Redirect to login if no admin is found
+      router.push("/admin/login");
     } else {
-      setAdmin(JSON.parse(storedAdmin)); // ✅ Load admin details
+      setAdmin(JSON.parse(storedAdmin));
     }
   }, []);
 
   const handleLogout = () => {
     fetch("http://localhost:3001/admin/logout", {
       method: "DELETE",
-      credentials: "include", // ✅ Ensures session is properly cleared
+      credentials: "include",
     }).then(() => {
       localStorage.removeItem("admin");
       router.push("/admin/login");
@@ -27,50 +39,191 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen flex bg-gray-100">
-      {/* Sidebar */}
-      <div className="w-1/4 bg-gray-900 text-white p-6 shadow-lg">
-        <h1 className="text-2xl font-bold text-center text-yellow-400">Admin Panel</h1>
-        <ul className="mt-6 space-y-4">
-          <li>
-            <Link href="/admin/jobs" className="block py-2 px-4 rounded hover:bg-gray-700">
-              Job Management
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/resume-techwise" className="block py-2 px-4 rounded hover:bg-gray-700">
-              Resume Techwise
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/open-resumes" className="block py-2 px-4 rounded hover:bg-gray-700">
-              Open Resumes
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/deleted-jobs" className="block py-2 px-4 rounded hover:bg-gray-700">
-              Deleted Job’s CV
-            </Link>
-          </li>
-          <li>
-            <Link href="/admin/create-job" className="block py-2 px-4 bg-blue-600 text-white text-center rounded hover:bg-blue-700 transition">
-              + Create Job
-            </Link>
-          </li>
-        </ul>
-      </div>
+    <div className={`h-screen w-screen flex justify-center p-8 overflow-hidden transition-all duration-300 ${
+      darkMode ? "bg-gray-900" : "bg-gradient-to-r from-blue-500 to-blue-700"
+    }`}>
+      <div className={`w-full max-w-[120%] h-full shadow-2xl rounded-3xl flex overflow-hidden transition-all duration-300 ${
+        darkMode ? "bg-gray-800 text-white" : "bg-gray-100"
+      }`}>
+        {/* Sidebar */}
+        <div className={`w-1/6 p-6 rounded-l-3xl shadow-lg transition-all duration-300 ${
+          darkMode ? "bg-[#111c44]" : "bg-white text-gray-900"
+        }`}>
+  {/* Company Logo */}
+  <div className="flex justify-center">
+  <img
+      src={darkMode 
+        ? "/updated_Genz_cover_White_text-removebg.png" 
+        : "/updated_Genz_Cover_black__text-removebg.png"}
+      alt="GenZ Logo"
+      className="w-[250px] max-w-[250px] h-auto mx-auto object-contain transition-all duration-300"
+    />
 
-      {/* Content Area */}
-      <div className="w-3/4 p-6 bg-white shadow-lg rounded-lg m-6">
-        <h2 className="text-3xl font-semibold text-gray-800">
-          Welcome, {admin ? admin.name : "Admin"}!
-        </h2>
-        <button
-          onClick={handleLogout}
-          className="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700 transition"
-        >
-          Logout
-        </button>
+  </div>
+
+  <ul className="mt-6 space-y-4 text-sm">
+    <li>
+      <button
+        onClick={() => setActiveTab("dashboard")}
+        className={`flex items-center gap-2 py-2 px-3 w-full rounded-lg transition ${
+          activeTab === "dashboard" ? (darkMode ? "bg-gray-700" : "bg-gray-200") : (darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200")
+        }`}
+      >
+        <Home size={20} color="#7551ff" />
+        Dashboard
+      </button>
+    </li>
+
+            <li>
+              <button
+                onClick={() => setActiveTab("profile")}
+                className={`flex items-center gap-2 py-2 px-3 w-full rounded-lg transition ${
+                  activeTab === "profile" ? (darkMode ? "bg-gray-700" : "bg-gray-200") : (darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200")
+                }`}
+              >
+                <Home size={20} color="#7551ff" />
+                Profile
+              </button>
+            </li>
+
+            <li>
+              <button
+                onClick={() => setActiveTab("jobs")}
+                className={`flex items-center gap-2 py-2 px-3 w-full rounded-lg transition ${
+                  activeTab === "jobs" ? (darkMode ? "bg-gray-700" : "bg-gray-200") : (darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200")
+                }`}
+              >
+                <Briefcase size={20} color="#7551ff" />
+                Jobs
+              </button>
+            </li>
+
+            <li>
+              <button
+                onClick={() => setActiveTab("resume-techwise")}
+                className={`flex items-center gap-2 py-2 px-3 w-full rounded-lg transition ${
+                  activeTab === "resume-techwise" ? (darkMode ? "bg-gray-700" : "bg-gray-200") : (darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200")
+                }`}
+              >
+                <FileText size={20} color="#7551ff" />
+                Techwise Resumes
+              </button>
+            </li>
+
+            <li>
+              <button
+                onClick={() => setActiveTab("open-resumes")}
+                className={`flex items-center gap-2 py-2 px-3 w-full rounded-lg transition ${
+                  activeTab === "open-resumes" ? (darkMode ? "bg-gray-700" : "bg-gray-200") : (darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200")
+                }`}
+              >
+                <User size={20} color="#7551ff" />
+                Open Resumes
+              </button>
+            </li>
+
+            <li>
+              <button
+                onClick={() => setActiveTab("deleted-jobs")}
+                className={`flex items-center gap-2 py-2 px-3 w-full rounded-lg transition ${
+                  activeTab === "deleted-jobs" ? (darkMode ? "bg-gray-700" : "bg-gray-200") : (darkMode ? "hover:bg-gray-700" : "hover:bg-gray-200")
+                }`}
+              >
+                <Trash2 size={20} color="#7551ff" />
+                Deleted CVs
+              </button>
+            </li>
+
+            <li>
+              <button
+                onClick={() => setActiveTab("create-job")}
+                className="flex items-center gap-2 py-2 px-3 w-full bg-[#7551ff] text-white rounded-lg hover:bg-purple-700 transition"
+              >
+                <Plus size={20} />
+                Create Job
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        {/* Main Content */}
+        <div className="w-5/6 h-full flex-1 relative overflow-hidden">
+          <div className="absolute top-5 right-8 flex items-center justify-end gap-4">
+            {/* Profile Section */}
+            <div className={`shadow-lg rounded-full p-3 w-[130px] h-14 flex items-center justify-end gap-x-3 transition-all ${
+                darkMode ? "bg-[#111c44]" : "bg-white"
+              }`}>
+              {/* Dark Mode Toggle */}
+              <button
+                onClick={toggleDarkMode}
+                className="text-2xl cursor-pointer transition-all"
+              >
+                {darkMode ? "☀️" : "🌙"}
+              </button>
+
+              <Menu as="div" className="relative">
+                <MenuButton className="flex items-center">
+                  <img
+                    src="/test_profile.png"
+                    alt="Profile"
+                    className="w-10 h-10 rounded-full object-cover cursor-pointer border-2 border-gray-200"
+                  />
+                </MenuButton>
+                <Menu.Items className={`absolute right-0 mt-3 w-56 shadow-md rounded-lg border z-50 overflow-hidden py-2 transition-all ${
+                  darkMode ? "bg-gray-800 text-white" : "bg-white"
+                }`}>
+                  <div className="px-4 py-2 text-sm font-semibold">
+                    👋 Hey, {admin ? admin.name : "Admin"}!
+                  </div>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button className={`px-4 py-2 w-full text-left ${active ? "bg-gray-200" : ""}`}>
+                        Profile Settings
+                      </button>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <button className="px-4 py-2 w-full text-left flex items-center gap-2 text-red-600" onClick={handleLogout}>
+                        <MdLogout size={20} />
+                        Logout
+                      </button>
+                    )}
+                  </Menu.Item>
+                </Menu.Items>
+              </Menu>
+            </div>
+          </div>
+
+          <div className={`content-area ${darkMode ? "dark-mode" : "light-mode"}`}>
+
+
+            {activeTab === "dashboard" && <DashboardContent />}
+            {activeTab === "jobs" && <AdminContent />}
+            {activeTab === "resume-techwise" && <ResumeTechwiseContent />}
+            {activeTab === "open-resumes" && <OpenResumesContent />}
+            {activeTab === "deleted-jobs" && <DeletedJobsContent />}
+
+            {/* Centered create-job Section with Increased Width */}
+            {activeTab === "create-job" && (
+              <div className="flex justify-center items-center h-full">
+                <div className="w-[700px]"> {/* Adjust width as needed */}
+                  <CreateJobContent />
+                </div>
+              </div>
+            )}
+
+          {/* Centered Profile Section with Increased Width */}
+            {activeTab === "profile" && (
+              <div className="flex justify-center items-center h-full">
+                <div className="w-[700px]"> {/* Adjust width as needed */}
+                  <AdminProfileContent />
+                </div>
+              </div>
+            )}
+
+          </div>
+        </div>
       </div>
     </div>
   );

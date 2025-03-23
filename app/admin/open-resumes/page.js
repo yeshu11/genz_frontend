@@ -5,6 +5,8 @@ const OpenResumes = () => {
   const [resumes] = useState([
     { id: 1, name: "John Doe", email: "john@example.com", role: "Frontend Developer" },
     { id: 2, name: "Jane Smith", email: "jane@example.com", role: "Backend Developer" },
+    { id: 3, name: "John Doe", email: "jlohn@example.com", role: "Frontend Developer" },
+    { id: 4, name: "Jane Smith", email: "juane@example.com", role: "Backend Developer" },
   ]);
 
   return (

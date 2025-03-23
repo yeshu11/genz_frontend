@@ -1,6 +1,7 @@
 "use client";
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { DarkModeProvider } from "@/context/DarkModeContext"; // ✅ Import Dark Mode Context
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
@@ -13,5 +14,9 @@ export default function AdminLayout({ children }) {
     }
   }, []);
 
-  return <>{children}</>;
+  return (
+    <DarkModeProvider>
+      {children}
+    </DarkModeProvider>
+  );
 }

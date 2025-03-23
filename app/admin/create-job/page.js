@@ -46,7 +46,7 @@ const CreateJob = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-6">
+    <div className="min-h-screen flex items-center justify-center">
       <div className="bg-white p-6 shadow-xl rounded-lg w-full max-w-2xl">
         <h1 className="text-2xl font-bold text-gray-800 mb-4">Create New Job</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -93,8 +93,9 @@ const CreateJob = () => {
             value={formData.status}
             onChange={handleChange}
           >
-            <option>Open</option>
-            <option>Closed</option>
+            <option>Onsite</option>
+            <option>Hybrid</option>
+            <option>Remote</option>
           </select>
           {/* Removed the file input for the image */}
           <button
