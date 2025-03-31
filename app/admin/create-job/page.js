@@ -19,31 +19,30 @@ const CreateJob = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Wrap form data in "job" object to match backend expectations
+  
     const jobData = new FormData();
     jobData.append("job[title]", formData.title);
     jobData.append("job[description]", formData.description);
     jobData.append("job[location]", formData.location);
     jobData.append("job[job_type]", formData.job_type);
     jobData.append("job[status]", formData.status);
-
+  
     try {
       const response = await fetch("http://localhost:3001/admin/jobs", {
         method: "POST",
         body: jobData,
+        credentials: "include",  // ✅ Ensures session is maintained
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to create job");
-      }
-
+  
+      if (!response.ok) throw new Error("Failed to create job");
+  
       alert("Job created successfully!");
       router.push("/admin/jobs");
     } catch (error) {
       alert(error.message);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center">

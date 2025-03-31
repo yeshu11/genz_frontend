@@ -15,18 +15,35 @@ import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
 
 const AdminDashboard = () => {
   const [admin, setAdmin] = useState(null);
+  const [loading, setLoading] = useState(true); // Add loading state
   const [activeTab, setActiveTab] = useState("dashboard");
   const { darkMode, toggleDarkMode } = useDarkMode(); // Use Context
   const router = useRouter();
 
   useEffect(() => {
     const storedAdmin = localStorage.getItem("admin");
+
     if (!storedAdmin) {
-      router.push("/admin/login");
-    } else {
-      setAdmin(JSON.parse(storedAdmin));
+      router.replace("/admin/login"); // Instant redirect, no flash
+      return;
     }
-  }, []);
+
+    try {
+      const parsedAdmin = JSON.parse(storedAdmin);
+
+      if (!parsedAdmin || typeof parsedAdmin !== "object") {
+        throw new Error("Invalid admin data format");
+      }
+
+      setAdmin(parsedAdmin);
+    } catch (error) {
+      console.error("Error parsing admin data:", error);
+      localStorage.removeItem("admin");
+      router.replace("/admin/login");
+    } finally {
+      setLoading(false); // Stop loading only if the admin is valid
+    }
+  }, [router]);
 
   const handleLogout = () => {
     fetch("http://localhost:3001/admin/logout", {
@@ -37,6 +54,8 @@ const AdminDashboard = () => {
       router.push("/admin/login");
     });
   };
+
+  if (loading) return null; // Prevent rendering while checking auth
 
   return (
     <div className={`h-screen w-screen flex justify-center p-8 overflow-hidden transition-all duration-300 ${
@@ -56,7 +75,7 @@ const AdminDashboard = () => {
         ? "/updated_Genz_cover_White_text-removebg.png" 
         : "/updated_Genz_Cover_black__text-removebg.png"}
       alt="GenZ Logo"
-      className="w-[250px] max-w-[250px] h-auto mx-auto object-contain transition-all duration-300"
+      className="w-[220px] max-w-[220px] h-auto mx-auto object-contain transition-all duration-300"
     />
 
   </div>

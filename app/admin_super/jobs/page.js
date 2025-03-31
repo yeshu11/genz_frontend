@@ -16,19 +16,27 @@ const SuperAdminJobsPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/super_admin/jobs', { cache: 'no-store' });
-      setJobs(response.data.length > 0 ? response.data : []);
+      const response = await axios.get("http://localhost:3001/admin_super/jobs", {
+        cache: "no-store",
+        withCredentials: true,
+      });
+  
+      console.log("API Response:", response.data); // ✅ Debugging API response
+      
+      setJobs(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
-      setError('Failed to load jobs: ' + error.message);
+      setError("Failed to load jobs: " + error.message);
       setJobs([]);
     }
   };
+  
+  
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this job?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:3001/super_admin/jobs/${id}`);
+        await axios.delete(`http://localhost:3001/admin_super/jobs/${id}`);
         fetchJobs(); // Refresh job list after deletion
       } catch (error) {
         setError('Failed to delete job: ' + error.message);
@@ -39,15 +47,21 @@ const SuperAdminJobsPage = () => {
   const toggleDeleteButton = (id) => {
     setShowDelete((prev) => ({
       ...prev,
-      [id]: true
+      [id]: !prev[id] // Toggle visibility on click
     }));
 
-    setTimeout(() => {
-      setShowDelete((prev) => ({
-        ...prev,
-        [id]: false
-      }));
-    }, 10000);
+    if (!showDelete[id]) {
+      setTimeout(() => {
+        setShowDelete((prev) => ({
+          ...prev,
+          [id]: false
+        }));
+      }, 10000); // Hide after 10 seconds
+    }
+  };
+
+  const truncateDescription = (description) => {
+    return description.length > 37 ? description.slice(0, 37) + '...' : description;
   };
 
   return (

@@ -15,24 +15,30 @@ const JobDetailModal = ({ jobId, onClose, refreshJobs }) => {
   const { darkMode } = useDarkMode(); // Use Global Dark Mode State
 
   useEffect(() => {
-    const fetchJobDetail = async () => {
-      if (!jobId) return;
-      setLoading(true);
-      try {
-        const response = await fetch(`http://localhost:3001/admin/jobs/${jobId}`);
-        if (!response.ok) throw new Error('Failed to fetch job details');
+  const fetchJobDetail = async () => {
+    if (!jobId) return;
+    setLoading(true);
+    try {
+      const response = await fetch(`http://localhost:3001/admin/jobs/${jobId}`, {
+        credentials: 'include', // ✅ Ensure cookies/session are sent
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
-        const data = await response.json();
-        setJob(data);
-        setEditedJob(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchJobDetail();
-  }, [jobId]);
+      if (!response.ok) throw new Error('Failed to fetch job details');
+
+      const data = await response.json();
+      setJob(data);
+      setEditedJob(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchJobDetail();
+}, [jobId]);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -42,8 +48,9 @@ const JobDetailModal = ({ jobId, onClose, refreshJobs }) => {
     try {
       const response = await fetch(`http://localhost:3001/admin/jobs/${jobId}`, {
         method: 'PUT',
+        credentials: 'include', // ✅ Ensure cookies/session are sent
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(editedJob),
+        body: JSON.stringify({ job: editedJob }), // ✅ Wrap inside "job"
       });
       if (!response.ok) throw new Error('Failed to update job');
       const updatedJob = await response.json();
@@ -54,7 +61,7 @@ const JobDetailModal = ({ jobId, onClose, refreshJobs }) => {
     } catch (error) {
       setError(error.message);
     }
-  };
+};
 
   if (!jobId) return null;
 
