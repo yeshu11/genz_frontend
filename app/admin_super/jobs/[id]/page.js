@@ -1,105 +1,134 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useParams, useRouter } from 'next/navigation';
+import { X, Pencil, Check } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { useDarkMode } from "@/components/DarkModeContext";
 
-const SuperAdminJobDetailPage = () => {
+const SuperAdminJobDetailModal = ({ jobId, onClose, refreshJobs }) => {
   const [job, setJob] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    location: '',
-    status: '',
-    job_type: ''
-  });
-
-  const params = useParams();
-  const router = useRouter();
-  const id = params?.id;
+  const [showFullDescription, setShowFullDescription] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedJob, setEditedJob] = useState(null);
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
     const fetchJobDetail = async () => {
-      if (!id) return;
-
+      if (!jobId) return;
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3001/super_admin/jobs/${id}`);
+        const response = await fetch(`http://localhost:3001/admin_super/jobs/${jobId}`, {
+          credentials: 'include',
+          headers: { 'Content-Type': 'application/json' },
+        });
         if (!response.ok) throw new Error('Failed to fetch job details');
-
         const data = await response.json();
         setJob(data);
-        setFormData({
-          title: data.title || '',
-          description: data.description || '',
-          location: data.location || '',
-          status: data.status || '',
-          job_type: data.job_type || ''
-        });
+        setEditedJob(data);
       } catch (error) {
         setError(error.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchJobDetail();
-  }, [id]);
+  }, [jobId]);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSave = async () => {
+  const handleEditClick = () => setIsEditing(true);
+  const handleSaveClick = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/super_admin/jobs/${id}`, {
+      const response = await fetch(`http://localhost:3001/admin_super/jobs/${jobId}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ job: formData })
+        body: JSON.stringify({ job: editedJob }),
       });
-
       if (!response.ok) throw new Error('Failed to update job');
-
       const updatedJob = await response.json();
       setJob(updatedJob);
+      setEditedJob(updatedJob);
       setIsEditing(false);
+      refreshJobs();
     } catch (error) {
       setError(error.message);
     }
   };
 
-  if (loading) return <p className="text-center text-gray-600 mt-10">Loading job details...</p>;
+  if (!jobId) return null;
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-100 to-gray-300 p-4">
-      <div className="w-[60%] bg-white shadow-lg rounded-lg p-6 border-l-4 border-blue-500">
-        {error && <p className="text-red-500 mb-2">{error}</p>}
+    <div className="fixed inset-0 flex items-center justify-center bg-black/50 backdrop-blur-sm z-50">
+      <div 
+        className={`w-[98%] max-w-5xl p-6 rounded-lg shadow-xl transform transition-all scale-105 relative overflow-hidden ${
+          darkMode ? "bg-[#111c44] text-white" : "bg-white text-black"
+        }`} 
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button className="absolute top-4 right-4" onClick={onClose}><X size={24} /></button>
+        {!isEditing && (
+          <motion.button
+            initial={{ scale: 0.8 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 0.3, repeat: Infinity, repeatType: 'reverse' }}
+            className="absolute top-4 left-4 text-blue-500 hover:text-blue-700"
+            onClick={handleEditClick}
+          >
+            <Pencil size={24} />
+          </motion.button>
+        )}
 
-        {job ? (
-          <>
-            <h1 className="text-3xl font-bold text-gray-800 border-b pb-2">{job.title}</h1>
-
+        {loading ? (
+          <p className="text-center text-gray-500 flex-grow flex items-center justify-center">Loading job details...</p>
+        ) : error ? (
+          <p className="text-center text-red-500 flex-grow flex items-center justify-center">{error}</p>
+        ) : (
+          <div className="flex flex-col flex-grow">
             {isEditing ? (
-              <div className="space-y-4">
-                <input type="text" name="title" value={formData.title} onChange={handleChange} className="w-full p-2 border rounded-md" />
-                <textarea name="description" value={formData.description} onChange={handleChange} className="w-full p-2 border rounded-md" rows="4" />
-                <input type="text" name="location" value={formData.location} onChange={handleChange} className="w-full p-2 border rounded-md" />
-                <select name="status" value={formData.status} onChange={handleChange} className="w-full p-2 border rounded-md">
-                  <option>Open</option>
-                  <option>Closed</option>
-                </select>
-                <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded-md">Save</button>
-              </div>
+              <input
+                type="text"
+                className={`text-2xl font-semibold text-center border-b p-1 ${darkMode ? "bg-transparent text-white border-gray-500" : "bg-white text-black border-gray-300"}`}
+                value={editedJob.title}
+                onChange={(e) => setEditedJob({ ...editedJob, title: e.target.value })}
+              />
             ) : (
-              <p>{job.description}</p>
+              <h2 className="text-3xl font-bold text-center">{job.title}</h2>
             )}
-          </>
-        ) : <p>Job not found.</p>}
+
+            <div className="grid grid-cols-2 gap-6 mt-6 p-6 rounded-lg">
+              <p><strong>📍 Location:</strong> {isEditing ? <input type="text" className={`border-b ml-2 p-1 ${darkMode ? "bg-transparent text-white border-gray-500" : "bg-white text-black border-gray-300"}`} value={editedJob.location} onChange={(e) => setEditedJob({ ...editedJob, location: e.target.value })} /> : ` ${job.location}`}</p>
+              <p><strong>📌 Status:</strong> {isEditing ? <input type="text" className={`border-b ml-2 p-1 ${darkMode ? "bg-transparent text-white border-gray-500" : "bg-white text-black border-gray-300"}`} value={editedJob.status} onChange={(e) => setEditedJob({ ...editedJob, status: e.target.value })} /> : ` ${job.status}`}</p>
+              <p><strong>💼 Job Type:</strong> {isEditing ? <input type="text" className={`border-b ml-2 p-1 ${darkMode ? "bg-transparent text-white border-gray-500" : "bg-white text-black border-gray-300"}`} value={editedJob.job_type} onChange={(e) => setEditedJob({ ...editedJob, job_type: e.target.value })} /> : ` ${job.job_type}`}</p>
+            </div>
+
+            <div className="flex-grow mt-6 p-6 border-t">
+              <div className="max-h-[250px] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+                {isEditing ? (
+                  <textarea className={`w-full border p-3 rounded-lg ${darkMode ? "bg-transparent text-white border-gray-500" : "bg-white text-black border-gray-300"}`} rows="5" value={editedJob.description} onChange={(e) => setEditedJob({ ...editedJob, description: e.target.value })} />
+                ) : (
+                  <p>{showFullDescription ? job.description : `${job.description.slice(0, 150)}...`}</p>
+                )}
+              </div>
+              {!isEditing && job.description.length > 150 && (
+                <button onClick={() => setShowFullDescription(!showFullDescription)} className="text-blue-600 font-semibold mt-2">
+                  {showFullDescription ? "Read Less" : "Read More"}
+                </button>
+              )}
+            </div>
+
+            {isEditing && (
+              <div className="flex justify-end mt-6">
+                <button onClick={handleSaveClick} className="bg-green-500 text-white px-5 py-3 rounded-lg flex items-center gap-2 hover:bg-green-600">
+                  <Check size={20} /> Save
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );
 };
 
-export default SuperAdminJobDetailPage;
+export default SuperAdminJobDetailModal;

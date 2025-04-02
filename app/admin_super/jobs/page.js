@@ -1,14 +1,18 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Trash2, MoreVertical } from 'lucide-react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Trash2, MoreVertical } from "lucide-react";
+import axios from "axios";
+import JobDetailModal from "./[id]/page";
+import { useDarkMode } from "@/components/DarkModeContext"; // Import Dark Mode Context
 
 const SuperAdminJobsPage = () => {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(null);
   const [showDelete, setShowDelete] = useState({});
+  const [selectedJob, setSelectedJob] = useState(null); // Track selected job
+  const { darkMode } = useDarkMode(); // Use Global Dark Mode State
 
   useEffect(() => {
     fetchJobs();
@@ -36,13 +40,17 @@ const SuperAdminJobsPage = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this job?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:3001/admin_super/jobs/${id}`);
+        await axios.delete(`http://localhost:3001/admin_super/jobs/${id}`, {
+          withCredentials: true, // ✅ Ensure credentials are sent
+        });
+  
         fetchJobs(); // Refresh job list after deletion
       } catch (error) {
         setError('Failed to delete job: ' + error.message);
       }
     }
   };
+  
 
   const toggleDeleteButton = (id) => {
     setShowDelete((prev) => ({
@@ -66,52 +74,56 @@ const SuperAdminJobsPage = () => {
 
   return (
     <div className="jobs-container">
-      <h1>Super Admin - Job Management</h1>
+      <h1 className={`text-3xl font-bold text-center mb-6 ${darkMode ? "text-white" : "text-black"}`}>
+        Super Admin - Manage Jobs
+      </h1>
       {error && <p className="error-message">{error}</p>}
-      {jobs !== null && jobs.length === 0 && <p>Currently, No Open Positions</p>}
-      
+      {jobs !== null && jobs.length === 0 && <p>No Job Openings Available</p>}
+
       <div className="job-listings">
-        {jobs && jobs.map((job) => (
-          <div className="job-card" key={job.id}>
-            <button onClick={() => toggleDeleteButton(job.id)} className="dots-button">
-              <MoreVertical size={20} />
-            </button>
-            
-            <h2 className="job-title">{job.title}</h2>
-            <p className="job-description">{job.description.length > 37 ? job.description.slice(0, 37) + '...' : job.description}</p>
-            
-            <div className="card-footer">
-              <motion.a
-                href={`/super_admin/jobs/${job.id}`}
-                className="read-more"
-                whileHover={{ scale: 1.1, textShadow: "0px 0px 5px rgba(0,0,255,0.5)" }}
-              >
-                Read More
-              </motion.a>
-              
-              <AnimatePresence>
-                {showDelete[job.id] && (
-                  <motion.button 
-                    className="delete-button"
-                    onClick={() => handleDelete(job.id)}
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    exit={{ y: 20, opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <motion.div 
-                      animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 10, 0] }} 
-                      transition={{ repeat: Infinity, duration: 0.6 }}
+        {jobs &&
+          jobs.map((job) => (
+            <div className={`job-card ${darkMode ? "dark-mode" : ""}`} key={job.id}>
+              {/* Vertical Dots at Top-Right Corner */}
+              <button onClick={() => toggleDeleteButton(job.id)} className="dots-button absolute top-2 right-2">
+                <MoreVertical size={20} />
+              </button>
+
+              <h2 className="job-title">{job.title}</h2>
+              <p className="job-description">{truncateDescription(job.description)}</p>
+
+              <div className="card-footer">
+                <motion.button
+                  onClick={() => setSelectedJob(job.id)}
+                  className="read-more"
+                  whileHover={{ scale: 1.1, textShadow: "0px 0px 5px rgba(0,0,255,0.5)" }}
+                >
+                  Read More
+                </motion.button>
+
+                <AnimatePresence>
+                  {showDelete[job.id] && (
+                    <motion.button
+                      className="delete-button absolute bottom-2 right-2"
+                      onClick={() => handleDelete(job.id)}
+                      initial={{ y: 20, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      exit={{ y: 20, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
                     >
-                      <Trash2 size={24} color="red" />
-                    </motion.div>
-                  </motion.button>
-                )}
-              </AnimatePresence>
+                      <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 10, 0] }} transition={{ repeat: Infinity, duration: 0.6 }}>
+                        <Trash2 size={24} color="red" />
+                      </motion.div>
+                    </motion.button>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
       </div>
+
+      {/* Job Detail Modal */}
+      {selectedJob && <JobDetailModal jobId={selectedJob} onClose={() => setSelectedJob(null)} refreshJobs={fetchJobs} />}
     </div>
   );
 };

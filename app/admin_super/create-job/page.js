@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useDarkMode } from "@/components/DarkModeContext";
 
-const CreateJob = () => {
+const CreateSuperAdminJob = () => {
   const { darkMode } = useDarkMode();
   const router = useRouter();
   const [formData, setFormData] = useState({
@@ -21,25 +21,25 @@ const CreateJob = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const jobData = new FormData();
     jobData.append("job[title]", formData.title);
     jobData.append("job[description]", formData.description);
     jobData.append("job[location]", formData.location);
     jobData.append("job[job_type]", formData.job_type);
     jobData.append("job[status]", formData.status);
-    
+
     try {
-      const response = await fetch("http://localhost:3001/admin/jobs", {
+      const response = await fetch("http://localhost:3001/admin_super/jobs", {
         method: "POST",
         body: jobData,
         credentials: "include",
       });
 
       if (!response.ok) throw new Error("Failed to create job");
-      
+
       alert("Job created successfully!");
-      router.push("/admin/jobs");
+      router.push("/admin_super/jobs");
     } catch (error) {
       alert(error.message);
     }
@@ -49,11 +49,12 @@ const CreateJob = () => {
     <div className={` flex items-center justify-center ${darkMode ? "bg-gray-900" : "bg-gray-100"}`}>
       <div className={`p-6 shadow-xl rounded-lg w-full max-w-2xl ${darkMode ? "bg-[#111c44] text-white" : "bg-white text-black"}`}>
         
-        <h1 className={`text-2xl font-bold mb-4 ${darkMode ? "text-white" : "text-gray-800"}`}>
-          Create New Job (Admin)
+        <h1 className={`text-2xl font-bold mb-4 ${darkMode ? "text-white" : "text-black"}`}>
+          Create New Job (Super Admin)
         </h1>
-        
+
         <form onSubmit={handleSubmit} className="space-y-4">
+          {/* ✅ Dark Mode Form Fields */}
           <input
             type="text"
             name="title"
@@ -80,6 +81,8 @@ const CreateJob = () => {
             value={formData.location}
             onChange={handleChange}
           />
+
+          {/* ✅ Dark Mode Select Dropdowns */}
           <select
             name="job_type"
             className={`w-full p-3 border rounded ${darkMode ? "bg-gray-800 text-white border-gray-600" : "bg-white text-black border-gray-300"}`}
@@ -91,6 +94,7 @@ const CreateJob = () => {
             <option>Contract</option>
             <option>Freelance</option>
           </select>
+
           <select
             name="status"
             className={`w-full p-3 border rounded ${darkMode ? "bg-gray-800 text-white border-gray-600" : "bg-white text-black border-gray-300"}`}
@@ -101,6 +105,8 @@ const CreateJob = () => {
             <option>Hybrid</option>
             <option>Remote</option>
           </select>
+
+          {/* ✅ Dark Mode Button */}
           <button
             type="submit"
             className={`w-full p-3 rounded-lg transition font-semibold ${darkMode ? "bg-blue-500 hover:bg-blue-600 text-white" : "bg-blue-600 hover:bg-blue-700 text-white"}`}
@@ -113,4 +119,4 @@ const CreateJob = () => {
   );
 };
 
-export default CreateJob;
+export default CreateSuperAdminJob;
