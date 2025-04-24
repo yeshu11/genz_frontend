@@ -1,0 +1,140 @@
+/* /home/jsk/experiment/genz_frontend/styles/PortfolioDetail.css */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap");
+
+.portfolio-detail-section {
+  min-height: 100vh;
+  padding: 50px 20px;
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
+  overflow-x: hidden;
+}
+
+.detail-container {
+  max-width: 1400px; /* Increased for wider image */
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  color: #ffffff;
+  font-size: 1.2em;
+  font-weight: 600;
+  text-decoration: none;
+  margin-bottom: 30px;
+  padding: 10px 20px;
+  border-radius: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.back-button:hover {
+  transform: scale(1.1) rotate(5deg); /* Scale and slight rotate */
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* Glow effect */
+}
+
+.detail-headline {
+  font-size: 4.5em;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.detail-title {
+  font-size: 2em;
+  font-weight: 400;
+  color: #e8dff6;
+  margin-bottom: 30px;
+  animation: fadeInUp 0.8s ease-out;
+}
+
+.detail-image-container {
+  width: 100%;
+  max-width: 2000px; /* Doubled from 1000px */
+  margin: 0 auto 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: fadeIn 1s ease-out;
+}
+
+.detail-image {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: cover;
+}
+
+.detail-content {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 30px;
+  border-radius: 15px;
+  backdrop-filter: blur(40px);
+  animation: fadeInUp 1.2s ease-out;
+}
+
+.detail-timeline {
+  font-size: 1.2em;
+  color: #ffbd59;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.detail-desc {
+  font-size: 1.1em;
+  line-height: 1.8;
+  color: #e8dff6;
+  margin-bottom: 20px;
+}
+
+.not-found {
+  text-align: center;
+  font-size: 2em;
+  color: #e8dff6;
+  padding: 100px 20px;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .detail-headline {
+    font-size: 3em;
+  }
+  .detail-title {
+    font-size: 1.5em;
+  }
+  .detail-image-container {
+    max-width: 100%;
+  }
+  .detail-content {
+    padding: 20px;
+  }
+  .back-button {
+    font-size: 1em;
+    padding: 8px 15px;
+  }
+}

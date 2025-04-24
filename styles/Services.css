@@ -1,0 +1,364 @@
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@300;400&family=Poppins:wght@300;400;500;700;800&display=swap");
+
+.services-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  position: relative;
+  overflow: hidden;
+  min-height: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.services-container {
+  max-width: 1200px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+  margin-top: 100px;
+}
+
+.services-heading {
+  font-family: "Baloo 2", sans-serif;
+  font-size:  3em;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 15px;
+}
+
+.services-heading-highlight {
+  color: #3a86ff;
+}
+
+.services-description {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.3em;
+  color: #666666;
+  margin: 0 auto 40px;
+  max-width: 800px; /* Reverted to original */
+}
+
+.services-cards {
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 150px; /* Adjusted without image */
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  margin-bottom: 30px;
+  margin: 0 auto;
+}
+
+.tilt-card {
+  transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+}
+
+.service-card {
+  position: relative;
+  border-radius: 15px;
+  transition: opacity 0.8s ease-in-out, transform 0.8s ease-in-out;
+}
+
+.left-card .service-card,
+.right-card .service-card,
+.center-card .service-card {
+  min-width: 320px;
+  height: 440px;
+  box-shadow: inset 5px 5px 5px rgba(0, 0, 0, 0.2),
+    inset -5px -5px 15px rgba(255, 255, 255, 0.1),
+    5px 5px 15px rgba(0, 0, 0, 0.3), -5px -5px 15px rgba(255, 255, 255, 0.1);
+  opacity: 1;
+  z-index: 2;
+  transform: translateY(0); /* Fix vertical shift */
+}
+
+.service-card .box {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  background: linear-gradient(to right, #d7a1f9, #3a86ff);
+  border-radius: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  transition: transform 0.5s ease;
+}
+
+.service-card:hover .box {
+  transform: translateY(-50px);
+}
+
+.service-card .box:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: rgba(142, 68, 173, 0.2);
+}
+
+.service-card .box .content {
+  padding: 20px;
+  text-align: center;
+}
+
+.service-card .box .content h3 {
+  font-family: "Poppins", sans-serif;
+  font-size: 1.8rem;
+  color: #fff;
+  z-index: 1;
+  transition: 0.5s;
+  margin-bottom: 15px;
+}
+
+.service-card .box .content p {
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  font-weight: 300;
+  color: rgba(255, 255, 255, 0.9);
+  z-index: 1;
+  transition: 0.5s;
+}
+
+.service-card .box .content .card-button {
+  position: relative;
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  color: white;
+  margin-top: 30px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transition: 0.5s;
+  font-family: "Poppins", sans-serif;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.service-card .box .content .card-button:hover {
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+  background: #fff;
+  color: #000;
+}
+
+.explore-services-button {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.2em;
+  padding: 12px 24px;
+  background-color: #5271ff;
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.explore-services-button:hover {
+  background-color: #3f5bff;
+}
+
+.explore-services-button .arrow {
+  transition: transform 0.3s ease;
+}
+
+.explore-services-button:hover .arrow {
+  transform: translateX(5px);
+}
+
+/* Animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.animate-on-scroll.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOut {
+  from {
+    opacity: 1;
+    transform: translateX(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateX(-100px);
+  }
+}
+
+.services-heading {
+  animation: fadeInDown 1s ease-out;
+}
+
+.services-description,
+.card-container,
+.explore-services-button {
+  animation: fadeInUp 1s ease-out 0.2s;
+}
+
+.service-card {
+  animation: slideIn 0.8s ease-in-out;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .services-section {
+    min-height: 900px;
+    padding: 80px 15px;
+  }
+
+  .services-description {
+    max-width: 90%;
+  }
+
+  .services-cards {
+    margin-top: 100px; /* Adjusted without image */
+  }
+
+  .services-heading {
+    font-size: 2.5em;
+  }
+
+  .services-description {
+    font-size: 1.1em;
+  }
+
+  .card-container {
+    flex-direction: row;
+    gap: 20px;
+    transform: translateX(30px); /* Move cards right on tablets */
+  }
+
+  .left-card .service-card,
+  .right-card .service-card {
+    min-width: 280px;
+    height: 400px;
+    opacity: 1;
+    transform: translateY(0); /* Fix vertical shift */
+  }
+  
+  .explore-services-button {
+    margin-left: 60px; /* Move button right on tablets */
+    margin-right: auto; /* Maintain alignment */
+    margin-top: 30px;
+  }
+}
+
+@media (max-width: 480px) {
+  .services-section {
+    min-height: 800px;
+    padding: 60px 10px;
+  }
+
+  .services-heading {
+    font-size: 2em;
+  }
+
+  .services-description {
+    font-size: 1em;
+  }
+
+  .card-container {
+    flex-direction: column;
+    gap: 10px;
+    transform: translateX(10px); /* Move cards right on mobile */
+  }
+
+  .center-card .service-card {
+    min-width: 280px;
+    height: 380px;
+    opacity: 1;
+    transform: translateY(0); /* Fix vertical shift */
+  }
+
+  .left-card,
+  .right-card {
+    display: none; /* Hide second card on mobile */
+  }
+
+  .service-card .box .content h3 {
+    font-size: 1.6rem;
+  }
+
+  .service-card .box .content p {
+    font-size: 0.9rem;
+  }
+
+  .service-card .box .content .card-button {
+    padding: 6px 16px;
+    font-size: 0.9rem;
+  }
+
+  .explore-services-button {
+    font-size: 1em;
+    padding: 10px 20px;
+    margin-left: 20px; /* Move button right on mobile */
+    margin-right: auto; /* Maintain alignment */
+    margin-top: 20px;
+  }
+}
+
+/* Laptop-specific adjustments (screens larger than 768px) */
+@media (min-width: 769px) {
+  .card-container {
+    transform: translateX(50px) translateY(60px); /* Move cards right and slightly down on laptops */
+  }
+
+  .explore-services-button {
+    margin-left: 100px; /* Move button right on laptops */
+    margin-right: auto; /* Maintain alignment */
+    margin-top: 90px; /* Move button slightly down on laptops (original: 20px) */
+  }
+}

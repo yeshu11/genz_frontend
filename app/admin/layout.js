@@ -2,6 +2,8 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { DarkModeProvider } from "@/context/DarkModeContext"; // ✅ Import Dark Mode Context
+import "@fortawesome/fontawesome-free/css/all.min.css";
+
 
 export default function AdminLayout({ children }) {
   const router = useRouter();

@@ -1,110 +1,315 @@
-.big-container {
+/* /home/jsk/experiment/genz_frontend/styles/Testimonials.css */
+@import url("https://fonts.googleapis.com/css2?family=Baloo+2:wght@700&family=Nunito:wght@300;400&display=swap");
+
+.testimonials-section {
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 100px 20px;
+  position: relative;
+  overflow: hidden;
+  min-height: 1000px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.testimonials-image-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.testimonials-image {
+  height: 500px;
+  width: auto;
+  max-width: 500px;
+  object-fit: contain;
+  animation: testimonialsImageFadeIn 1s ease-out;
+}
+
+.testimonials-container {
+  max-width: 1200px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.testimonials-heading {
+  font-family: "Baloo 2", sans-serif;
+  font-size: 3em;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 20px;
+  animation: testimonialsFadeInDown 1s ease-out;
+}
+
+.testimonials-heading-highlight {
+  color: #5271ff;
+}
+
+.testimonials-description {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.2em;
+  color: #666666;
+  margin: 0 auto 20px;
+  max-width: 800px;
+  animation: testimonialsFadeInUp 1s ease-out 0.2s;
+}
+
+.testimonials-slider {
+  overflow: hidden;
+  position: relative;
+  margin-top: 80px;
+}
+
+.testimonials-slider-inner {
+  display: flex;
+  width: 100%;
+}
+
+.testimonials-slide {
+  display: flex;
+  flex: 0 0 100%;
+  gap: 30px;
+  padding: 0 15px;
+  justify-content: center;
+}
+
+.testimonial-card {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  padding: 30px;
+  width: 45%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: testimonialsSlideIn 0.8s ease-out;
+}
+
+.testimonial-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.testimonial-client {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.client-image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 15px;
+  border: 2px solid #5271ff;
+}
+
+.client-info {
+  text-align: left;
+}
+
+.client-name {
+  font-family: "Baloo 2", sans-serif;
+  font-size: 1.5em;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.client-role {
+  font-family: "Nunito", sans-serif;
+  font-size: 1em;
+  color: #666666;
+  margin: 5px 0 0;
+}
+
+.testimonial-text {
+  font-family: "Nunito", sans-serif;
+  font-size: 1.1em;
+  color: #333333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@keyframes testimonialsFadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes testimonialsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes testimonialsFadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes testimonialsImageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tablet Responsive Design (max-width: 768px) */
+@media (max-width: 768px) {
+  .testimonials-section {
+    padding: 40px 15px;
+    min-height: 800px;
+  }
+
+  .testimonials-container {
+    max-width: 90%;
+  }
+
+  .testimonials-heading {
+    font-size: 2.5em;
+    margin-bottom: 15px;
+  }
+
+  .testimonials-description {
+    font-size: 1.1em;
+    max-width: 90%;
+    margin-bottom: 15px;
+  }
+
+  .testimonials-slider {
+    margin-top: 60px;
+  }
+
+  .testimonials-slide {
+    gap: 20px;
+    padding: 0 10px;
+  }
+
+  .testimonial-card {
+    width: 195%;
+    padding: 15px;
+  }
+
+  .client-image {
+    width: 45px;
+    height: 45px;
+    margin-right: 12px;
+  }
+
+  .client-name {
+    font-size: 1.4em;
+  }
+
+  .client-role {
+    font-size: 0.9em;
+  }
+
+  .testimonial-text {
+    font-size: 1em;
+  }
+
+  .testimonials-image-wrapper {
+    margin-top: 30px;
+  }
+
+  .testimonials-image {
+    height: 400px;
+    max-width: 400px;
+  }
+}
+
+/* Mobile Responsive Design (max-width: 480px) */
+@media (max-width: 480px) {
+  .testimonials-section {
+    padding: 60px 10px;
+    min-height: 600px;
+  }
+
+  .testimonials-container {
+    max-width: 100%;
+  }
+
+  .testimonials-heading {
+    font-size: 1.8em;
+    margin-bottom: 10px;
+  }
+
+  .testimonials-description {
+    font-size: 0.9em;
+    max-width: 90%;
+    margin-bottom: 10px;
+  }
+
+  .testimonials-slider {
+    margin-top: 40px;
+  }
+
+  .testimonials-slide {
     display: flex;
     justify-content: center;
-    align-items: center;
-    padding: 100px 20px; /* Increased padding for more height */
-    background-color: white; /* Outer background color */
-    min-height: 110vh; /* Increased container height */
-    position: relative;
-}
+    padding: 0 5px;
+  }
 
-.bg {
+  .testimonials-slider-inner {
+    display: flex;
     width: 100%;
-    max-width: 1300px;
-    padding: 50px;
-    border-radius: 15px; /* Rounded corners */
-    background-color: #666; /* Subsection background */
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Add shadow for separation */
-    min-height: 700px; /* More height */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between; /* Push cards lower */
-}
+  }
 
-/* Make heading bigger and stylish */
-.title {
-    text-align: center;
-    font-size: 40px; /* Increased font size */
-    font-weight: bold;
-    color: white;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin-bottom: 30px;
-}
+  .testimonial-card {
+    width: 90%; /* Single card for all testimonials */
+    padding: 20px;
+  }
 
-/* Improve description */
-.desc {
-    text-align: center;
-    font-size: 18px;
-    color: white;
-    max-width: 800px;
-    margin: 0 auto 50px;
-}
+  .testimonial-card:not(:first-child) {
+    display: none; /* Hide additional cards */
+  }
 
-/* Sliding animation for cards */
-.blocks {
-    display: flex;
-    gap: 50px;
-    overflow: hidden; /* Hide overflowing cards */
-    position: relative;
-}
+  .client-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
 
-.slider {
-    display: flex;
-    gap: 50px;
-    animation: slide 10s linear infinite; /* Sliding animation */
-}
+  .client-name {
+    font-size: 1.3em;
+  }
 
-/* Card styles */
-.content {
-    width: 100%;
-    max-width: 320px;
-    background-color: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-    text-align: center;
-    min-height: 250px;
-    flex-shrink: 0;
-}
+  .client-role {
+    font-size: 0.8em;
+  }
 
-/* Profile image */
-.profile-img {
-    width: 70px;
-    height: 70px;
-    border-radius: 50%;
-}
+  .testimonial-text {
+    font-size: 0.9em;
+    line-height: 1.5;
+  }
 
-/* Person details */
-.person {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    margin-top: 15px;
-}
+  .testimonials-image-wrapper {
+    margin-top: 20px;
+  }
 
-/* Name & Designation */
-.name {
-    font-weight: bold;
-    font-size: 18px;
-}
-.desig {
-    font-size: 14px;
-    color: gray;
-}
-
-/* Sliding Animation Keyframes */
-@keyframes slide {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
-}
-
-/* Stop animation when hovering over any card */
-.blocks:hover .slider {
-    animation-play-state: paused;
+  .testimonials-image {
+    height: 300px; /* Unchanged, perfect as per feedback */
+    max-width: 300px;
+  }
 }

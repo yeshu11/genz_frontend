@@ -1,0 +1,52 @@
+/* /home/jsk/experiment/genz_frontend/styles/Navbar.css */
+nav {
+    transition: all 0.3s ease;
+    box-shadow: none !important;
+  }
+  
+  nav img {
+    height: 64px;
+    width: auto;
+    object-fit: contain;
+    transition: height 0.3s ease;
+  }
+  
+  @media (min-width: 768px) {
+    nav img {
+      height: 80px;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    nav img {
+      height: 66px; /* Desktop ke liye size badhaya */
+    }
+  }
+  
+  nav .absolute {
+    background: #185186;
+    z-index: 40;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  nav .transition-all {
+    transition: all 0.3s ease;
+  }
+  
+  nav a {
+    font-size: 1rem;
+    font-weight: 500;
+    transition: color 0.2s ease;
+  }
+  
+  nav a:hover {
+    color: #90cdf4;
+  }
+  
+  @media (max-width: 767px) {
+    nav .absolute {
+      width: 100%;
+      left: 0;
+      top: 64px;
+    }
+  }
