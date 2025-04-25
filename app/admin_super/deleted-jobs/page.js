@@ -10,7 +10,6 @@ const DeletedJobs = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showIcons, setShowIcons] = useState({});
   const [expanded, setExpanded] = useState(false);
-  const maxDescriptionLength = 200; // Set character limit for "Read More"
   const { darkMode } = useDarkMode(); // Use Global Dark Mode State
 
 

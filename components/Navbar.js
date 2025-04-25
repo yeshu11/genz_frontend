@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image"; // Added for <Image>
 
 const Navbar = () => {
   const [visible, setVisible] = useState(true);
@@ -28,7 +29,7 @@ const Navbar = () => {
     <nav
       className={`fixed top-0 w-full transition-all duration-300 ${
         visible ? "translate-y-0" : "-translate-y-full"
-      } z-50 lg:h-[128px]`} // Desktop ke liye height chhota kiya
+      } z-50 lg:h-[128px]`}
       style={{
         background: isScrolled
           ? "#185186"
@@ -38,9 +39,11 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto px-4 py-3 lg:py-2 flex justify-between items-center">
         <div className="flex items-center lg:pl-6">
           <Link href="/">
-            <img
+            <Image
               src="/navbar_logo.png"
               alt="GenZ Tech Logo"
+              width={1128}
+              height={80} // Estimated based on h-12 to h-32
               className="h-12 w-auto object-contain md:h-20 lg:h-32 lg:-ml-32"
             />
           </Link>

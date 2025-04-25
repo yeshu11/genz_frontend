@@ -7,7 +7,7 @@ export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // Loading state
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   // Redirect if already logged in
@@ -18,7 +18,7 @@ export default function AdminLogin() {
     } else {
       setLoading(false); // Allow rendering when not logged in
     }
-  }, []);
+  }, [router]); // Added router to dependency array
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -53,7 +53,6 @@ export default function AdminLogin() {
 
   if (loading) return null; // Prevent rendering while checking auth
 
-
   return (
     <div className="flex justify-center items-center h-screen bg-gray-100">
       <div className="bg-white p-8 shadow-lg rounded-lg w-96">
@@ -76,7 +75,10 @@ export default function AdminLogin() {
             required
             className="w-full p-2 border rounded"
           />
-          <button type="submit" className="w-full bg-blue-500 text-white p-2 rounded">
+          <button
+            type="submit"
+            className="w-full bg-blue-500 text-white p-2 rounded"
+          >
             Login
           </button>
         </form>

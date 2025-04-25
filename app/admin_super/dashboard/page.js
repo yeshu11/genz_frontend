@@ -1,26 +1,26 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
+import { useDarkMode } from "@/components/DarkModeContext";
 
 const SuperAdminDashboard = () => {
   const [isLoading, setIsLoading] = useState(true); // Prevents flashing
   const router = useRouter();
-  const { darkMode } = useDarkMode(); // Use Global Dark Mode State
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const storedAdminSuper = localStorage.getItem("admin_super");
 
       if (!storedAdminSuper) {
-        router.replace("/admin_super/login"); // ✅ Redirect correctly
+        router.replace("/admin_super/login");
       } else {
-        setIsLoading(false); // ✅ Stop loading once verified
+        setIsLoading(false);
       }
     }
-  }, []);
+  }, [router]); // Added router to dependency array
 
-  if (isLoading) return null; // ✅ Prevent rendering until check completes
+  if (isLoading) return null; // Prevent rendering until check completes
 
   return (
     <div>

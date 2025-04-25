@@ -1,7 +1,6 @@
-// /home/jsk/experiment/genz_frontend/components/Portfolio.js
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react"; // Added useMemo
 import Link from "next/link";
 import "../styles/Portfolio.css";
 
@@ -10,7 +9,7 @@ const Portfolio = () => {
   const intervalRef = useRef(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const portfolioItems = [
+  const portfolioItems = useMemo(() => [
     {
       id: "the-stylease",
       timeline: "2022 — SEO",
@@ -47,42 +46,45 @@ const Portfolio = () => {
       headlineColor: "#50326e",
       hoverColor: "#8e44ad",
     },
-  ];
+  ], []); // Empty deps for static data
 
-  const updateSlider = (direction = "next") => {
-    setCurrentIndex((prevIndex) => {
-      let newIndex;
-      if (direction === "next") {
-        newIndex = (prevIndex + 1) % portfolioItems.length;
-      } else {
-        newIndex = (prevIndex - 1 + portfolioItems.length) % portfolioItems.length;
-      }
-
-      const slider = sliderRef.current;
-      const cards = Array.from(slider.children);
-
-      cards.forEach((card, index) => {
-        card.style.transition = "none";
-        card.classList.add("displaynone");
-        card.style.transform = direction === "next" ? "translateX(100%)" : "translateX(-100%)";
-
-        if (index === newIndex) {
-          card.classList.remove("displaynone");
-          card.classList.add("display", "animated");
-          card.style.transform = direction === "next" ? "translateX(-100%)" : "translateX(100%)";
+  const updateSlider = useCallback(
+    (direction = "next") => {
+      setCurrentIndex((prevIndex) => {
+        let newIndex;
+        if (direction === "next") {
+          newIndex = (prevIndex + 1) % portfolioItems.length;
+        } else {
+          newIndex = (prevIndex - 1 + portfolioItems.length) % portfolioItems.length;
         }
 
-        setTimeout(() => {
-          card.style.transition = "transform 0.8s ease";
-          if (index === newIndex) {
-            card.style.transform = "translateX(0)";
-          }
-        }, 10);
-      });
+        const slider = sliderRef.current;
+        const cards = Array.from(slider.children);
 
-      return newIndex;
-    });
-  };
+        cards.forEach((card, index) => {
+          card.style.transition = "none";
+          card.classList.add("displaynone");
+          card.style.transform = direction === "next" ? "translateX(100%)" : "translateX(-100%)";
+
+          if (index === newIndex) {
+            card.classList.remove("displaynone");
+            card.classList.add("display", "animated");
+            card.style.transform = direction === "next" ? "translateX(-100%)" : "translateX(100%)";
+          }
+
+          setTimeout(() => {
+            card.style.transition = "transform 0.8s ease";
+            if (index === newIndex) {
+              card.style.transform = "translateX(0)";
+            }
+          }, 10);
+        });
+
+        return newIndex;
+      });
+    },
+    [portfolioItems, sliderRef]
+  );
 
   useEffect(() => {
     // Initial render
@@ -104,7 +106,7 @@ const Portfolio = () => {
     intervalRef.current = setInterval(() => updateSlider("next"), 8000);
 
     return () => clearInterval(intervalRef.current);
-  }, []);
+  }, [currentIndex, updateSlider]);
 
   const handleMouseEnter = () => clearInterval(intervalRef.current);
   const handleMouseLeave = () => {
@@ -139,8 +141,7 @@ const Portfolio = () => {
       </div>
       <div className="body-overlay">
         <div className="container">
-          <div className="outer-top">
-          </div>
+          <div className="outer-top"></div>
           <div className="slider-wrapper">
             <button className="slider-arrow left-arrow" onClick={handlePrev}>
               ◀

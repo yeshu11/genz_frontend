@@ -126,7 +126,7 @@ const Services = () => {
         </p>
         <div className="services-cards">
           <div className="card-container">
-            {getVisibleServices().map((service, index) => (
+            {getVisibleServices().map((service) => (
               <Tilt
                 key={`${service.id}-${service.position}`}
                 tiltMaxAngleX={10}

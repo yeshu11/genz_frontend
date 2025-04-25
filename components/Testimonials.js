@@ -1,7 +1,7 @@
-// /home/jsk/experiment/genz_frontend/components/Testimonials.js
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import Image from "next/image";
 import "../styles/Testimonials.css";
 
 const Testimonials = () => {
@@ -99,7 +99,7 @@ const Testimonials = () => {
   const totalSlides = Math.ceil(testimonials.length / 2); // 7 slides
   const extendedSlides = [...Array(totalSlides), 0]; // Duplicate first slide for seamless loop
 
-  const updateSlider = () => {
+  const updateSlider = useCallback(() => {
     setCurrentIndex((prevIndex) => {
       if (prevIndex >= totalSlides) {
         // Reset to first slide without transition
@@ -114,12 +114,12 @@ const Testimonials = () => {
       }
       return prevIndex + 1;
     });
-  };
+  }, [sliderRef, totalSlides]); // Removed testimonials
 
   useEffect(() => {
     intervalRef.current = setInterval(updateSlider, 5000);
     return () => clearInterval(intervalRef.current);
-  }, []);
+  }, [updateSlider]);
 
   const handleMouseEnter = () => clearInterval(intervalRef.current);
   const handleMouseLeave = () => {
@@ -133,7 +133,8 @@ const Testimonials = () => {
           What Our <span className="testimonials-heading-highlight">Clients Say</span>
         </h2>
         <p className="testimonials-description">
-          Hear from our global clients about how GENZ delivers impactful web, app, and SEO solutions.
+          Hear from our global clients about how GENZ delivers impactful web, app,
+          and SEO solutions.
         </p>
         <div
           className="testimonials-slider"
@@ -160,9 +161,11 @@ const Testimonials = () => {
                         key={`${actualIndex}-${cardIndex}`}
                       >
                         <div className="testimonial-client">
-                          <img
+                          <Image
                             src={testimonial.image || "/persona.png"}
                             alt={testimonial.name}
+                            width={60}
+                            height={60}
                             className="client-image"
                           />
                           <div className="client-info">
@@ -180,9 +183,11 @@ const Testimonials = () => {
         </div>
       </div>
       <div className="testimonials-image-wrapper">
-        <img
+        <Image
           src="/testimonial.webp"
           alt="Testimonial Decoration"
+          width={300}
+          height={200}
           className="testimonials-image"
         />
       </div>

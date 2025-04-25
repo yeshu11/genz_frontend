@@ -1,8 +1,8 @@
-// /home/jsk/experiment/genz_frontend/pages/portfolio/[id].js
 "use client";
 
 import { useRouter } from "next/router";
 import Link from "next/link";
+import Image from "next/image"; // Added for <Image>
 import "../../styles/PortfolioDetail.css";
 
 const portfolioItems = [
@@ -68,9 +68,11 @@ const PortfolioDetail = () => {
         </h1>
         <h3 className="detail-title">{portfolio.title}</h3>
         <div className="detail-image-container">
-          <img
+          <Image
             src={portfolio.largeImage || portfolio.background}
             alt={portfolio.headline}
+            width={800}
+            height={600} // Estimated for large portfolio image
             className="detail-image"
           />
         </div>

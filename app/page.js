@@ -7,7 +7,6 @@ import Portfolio from "@/components/Portfolio";
 import WeServe from "@/components/WeServe";
 import Testimonials from "@/components/Testimonials";
 import Hero3DModel from "@/components/Hero3DModel";
-import Tilt from "react-parallax-tilt";
 import AboutUs from "../components/AboutUs";
 import Services from "@/components/Services";
 

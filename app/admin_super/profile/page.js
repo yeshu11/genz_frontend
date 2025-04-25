@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
+import Image from "next/image"; // Added for <Image>
+import { useDarkMode } from "@/components/DarkModeContext";
 
 const SuperAdminProfile = () => {
   const [superAdmin, setSuperAdmin] = useState(null);
-  const { darkMode } = useDarkMode(); // Use Global Dark Mode State
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
-      // Get stored super admin details
       const storedSuperAdmin = localStorage.getItem("admin_super");
       if (storedSuperAdmin) {
         setSuperAdmin(JSON.parse(storedSuperAdmin));
@@ -19,21 +19,29 @@ const SuperAdminProfile = () => {
   return (
     <div className="p-8 min-h-screen flex flex-col">
       {/* Title - Stays at the Top */}
-      <h1 className={`text-3xl font-bold text-center mb-6 relative top-14 ${darkMode ? "text-white" : "text-black"}`}>
+      <h1
+        className={`text-3xl font-bold text-center mb-6 relative top-14 ${
+          darkMode ? "text-white" : "text-black"
+        }`}
+      >
         Super Admin Profile
       </h1>
 
       {/* Centered Profile Card */}
       <div className="flex-grow flex justify-center items-center">
-        <div className={`shadow-2xl rounded-2xl p-10 max-w-lg w-full text-center transition-all ${
-          darkMode ? "bg-[#111c44] text-white" : "bg-white text-gray-800"
-        }`}>
+        <div
+          className={`shadow-2xl rounded-2xl p-10 max-w-lg w-full text-center transition-all ${
+            darkMode ? "bg-[#111c44] text-white" : "bg-white text-gray-800"
+          }`}
+        >
           {/* Profile Picture */}
           <div className="flex justify-center">
-            <img
+            <Image
               src="/test_profile.png"
               alt="Super Admin Profile"
-              className="w-32 h-32 rounded-full object-cover border-4 border-gray-300"
+              width={128}
+              height={128} // Based on w-32 h-32
+              className="rounded-full object-cover border-4 border-gray-300"
             />
           </div>
 

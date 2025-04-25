@@ -4,15 +4,15 @@ import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Trash2, MoreVertical } from "lucide-react";
 import axios from "axios";
-import JobDetailModal from "./[id]/page";
-import { useDarkMode } from "@/components/DarkModeContext"; // Import Dark Mode Context
+import SuperAdminJobDetailModal from "@/components/SuperAdminJobDetailModal";
+import { useDarkMode } from "@/components/DarkModeContext";
 
 const SuperAdminJobsPage = () => {
   const [jobs, setJobs] = useState(null);
   const [error, setError] = useState(null);
   const [showDelete, setShowDelete] = useState({});
-  const [selectedJob, setSelectedJob] = useState(null); // Track selected job
-  const { darkMode } = useDarkMode(); // Use Global Dark Mode State
+  const [selectedJob, setSelectedJob] = useState(null);
+  const { darkMode } = useDarkMode();
 
   useEffect(() => {
     fetchJobs();
@@ -20,56 +20,55 @@ const SuperAdminJobsPage = () => {
 
   const fetchJobs = async () => {
     try {
+      console.log("Fetching jobs from http://localhost:3001/admin_super/jobs");
       const response = await axios.get("http://localhost:3001/admin_super/jobs", {
         cache: "no-store",
         withCredentials: true,
       });
-  
-      console.log("API Response:", response.data); // ✅ Debugging API response
-      
+
+      console.log("API Response:", response.data);
       setJobs(Array.isArray(response.data) ? response.data : []);
     } catch (error) {
+      console.error("Fetch jobs error:", error);
       setError("Failed to load jobs: " + error.message);
       setJobs([]);
     }
   };
-  
-  
 
   const handleDelete = async (id) => {
     const confirmDelete = window.confirm("Are you sure you want to delete this job?");
     if (confirmDelete) {
       try {
+        console.log(`Deleting job with id: ${id}`);
         await axios.delete(`http://localhost:3001/admin_super/jobs/${id}`, {
-          withCredentials: true, // ✅ Ensure credentials are sent
+          withCredentials: true,
         });
-  
-        fetchJobs(); // Refresh job list after deletion
+        fetchJobs();
       } catch (error) {
-        setError('Failed to delete job: ' + error.message);
+        console.error("Delete job error:", error);
+        setError("Failed to delete job: " + error.message);
       }
     }
   };
-  
 
   const toggleDeleteButton = (id) => {
     setShowDelete((prev) => ({
       ...prev,
-      [id]: !prev[id] // Toggle visibility on click
+      [id]: !prev[id],
     }));
 
     if (!showDelete[id]) {
       setTimeout(() => {
         setShowDelete((prev) => ({
           ...prev,
-          [id]: false
+          [id]: false,
         }));
-      }, 10000); // Hide after 10 seconds
+      }, 10000);
     }
   };
 
   const truncateDescription = (description) => {
-    return description.length > 37 ? description.slice(0, 37) + '...' : description;
+    return description.length > 37 ? description.slice(0, 37) + "..." : description;
   };
 
   return (
@@ -84,8 +83,10 @@ const SuperAdminJobsPage = () => {
         {jobs &&
           jobs.map((job) => (
             <div className={`job-card ${darkMode ? "dark-mode" : ""}`} key={job.id}>
-              {/* Vertical Dots at Top-Right Corner */}
-              <button onClick={() => toggleDeleteButton(job.id)} className="dots-button absolute top-2 right-2">
+              <button
+                onClick={() => toggleDeleteButton(job.id)}
+                className="dots-button absolute top-2 right-2"
+              >
                 <MoreVertical size={20} />
               </button>
 
@@ -111,7 +112,10 @@ const SuperAdminJobsPage = () => {
                       exit={{ y: 20, opacity: 0 }}
                       transition={{ duration: 0.3 }}
                     >
-                      <motion.div animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 10, 0] }} transition={{ repeat: Infinity, duration: 0.6 }}>
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1], rotate: [0, -10, 10, 0] }}
+                        transition={{ repeat: Infinity, duration: 0.6 }}
+                      >
                         <Trash2 size={24} color="red" />
                       </motion.div>
                     </motion.button>
@@ -122,8 +126,13 @@ const SuperAdminJobsPage = () => {
           ))}
       </div>
 
-      {/* Job Detail Modal */}
-      {selectedJob && <JobDetailModal jobId={selectedJob} onClose={() => setSelectedJob(null)} refreshJobs={fetchJobs} />}
+      {selectedJob && (
+        <SuperAdminJobDetailModal
+          jobId={selectedJob}
+          onClose={() => setSelectedJob(null)}
+          refreshJobs={fetchJobs}
+        />
+      )}
     </div>
   );
 };

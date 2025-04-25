@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useState } from "react";
-import { MoreVertical } from "lucide-react";
 import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
 
 
@@ -9,7 +8,6 @@ const ResumeTechwise = () => {
   const [selectedJob, setSelectedJob] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  const maxDescriptionLength = 150;
   const [jobDetails, setJobDetails] = useState({});
   const { darkMode } = useDarkMode(); // Use Global Dark Mode State
 
