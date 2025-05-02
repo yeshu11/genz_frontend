@@ -30,13 +30,16 @@ const CreateSuperAdminJob = () => {
     jobData.append("job[status]", formData.status);
 
     try {
-      const response = await fetch("http://localhost:3001/admin_super/jobs", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/jobs`, {
         method: "POST",
         body: jobData,
         credentials: "include",
       });
 
-      if (!response.ok) throw new Error("Failed to create job");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to create job");
+      }
 
       alert("Job created successfully!");
       router.push("/admin_super/jobs");
@@ -46,7 +49,7 @@ const CreateSuperAdminJob = () => {
   };
 
   return (
-    <div className={` flex items-center justify-center ${darkMode ? "bg-gray-900" : "bg-gray-100"}`}>
+    <div className={`flex items-center justify-center ${darkMode ? "bg-gray-900" : "bg-gray-100"}`}>
       <div className={`p-6 shadow-xl rounded-lg w-full max-w-2xl ${darkMode ? "bg-[#111c44] text-white" : "bg-white text-black"}`}>
         
         <h1 className={`text-2xl font-bold mb-4 ${darkMode ? "text-white" : "text-black"}`}>
