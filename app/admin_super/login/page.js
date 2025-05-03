@@ -7,16 +7,16 @@ export default function AdminSuperLogin() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true); // 🔹 Loading state to prevent flash
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  // 🔹 Redirect if already logged in
+  // Redirect if already logged in
   useEffect(() => {
     const storedAdminSuper = localStorage.getItem("admin_super");
     if (storedAdminSuper) {
-      router.replace("/admin_super"); // Redirect immediately
+      router.replace("/admin_super");
     } else {
-      setLoading(false); // Allow rendering when not logged in
+      setLoading(false);
     }
   }, [router]);
 
@@ -25,7 +25,7 @@ export default function AdminSuperLogin() {
     setError(null);
 
     try {
-      const response = await fetch("http://localhost:3001/admin_super/sign_in", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/sign_in`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -45,14 +45,14 @@ export default function AdminSuperLogin() {
         router.push("/admin_super");
       } else {
         console.error("AdminSuper data missing from response:", data);
+        setError("Login failed. Unexpected response.");
       }
     } catch (error) {
       console.error("Login error:", error);
-      setError("Login failed. Check your email/password.");
+      setError("Login failed. Please check your connection or try again later.");
     }
   };
 
-  // 🔹 Prevent flashing by not rendering login page while checking auth
   if (loading) return null;
 
   return (
