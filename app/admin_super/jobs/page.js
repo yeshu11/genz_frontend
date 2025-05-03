@@ -20,8 +20,8 @@ const SuperAdminJobsPage = () => {
 
   const fetchJobs = async () => {
     try {
-      console.log("Fetching jobs from http://localhost:3001/admin_super/jobs");
-      const response = await axios.get("http://localhost:3001/admin_super/jobs", {
+      console.log(`Fetching jobs from ${process.env.NEXT_PUBLIC_API_URL}/admin_super/jobs`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/jobs`, {
         cache: "no-store",
         withCredentials: true,
       });
@@ -40,7 +40,7 @@ const SuperAdminJobsPage = () => {
     if (confirmDelete) {
       try {
         console.log(`Deleting job with id: ${id}`);
-        await axios.delete(`http://localhost:3001/admin_super/jobs/${id}`, {
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/jobs/${id}`, {
           withCredentials: true,
         });
         fetchJobs();
