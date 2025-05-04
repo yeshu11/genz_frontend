@@ -313,7 +313,7 @@
   .card-container {
     flex-direction: column;
     gap: 10px;
-    transform: translateX(10px); /* Move cards right on mobile */
+    transform: translateX(5px); /* Move cards right on mobile */
   }
 
   .center-card .service-card {
@@ -344,7 +344,7 @@
   .explore-services-button {
     font-size: 1em;
     padding: 10px 20px;
-    margin-left: 20px; /* Move button right on mobile */
+    margin-left: 10px; /* Move button right on mobile */
     margin-right: auto; /* Maintain alignment */
     margin-top: 20px;
   }
