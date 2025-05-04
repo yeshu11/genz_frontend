@@ -46,7 +46,7 @@ const SuperAdminDashboard = () => {
   const handleLogout = async () => {
     try {
       console.log("Attempting logout...");
-      const response = await fetch("http://localhost:3001/admin_super/logout", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/logout`, {
         method: "DELETE",
         credentials: "include",
         headers: {

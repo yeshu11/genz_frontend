@@ -13,7 +13,9 @@ const ResumeTechwise = () => {
   useEffect(() => {
     const fetchResumes = async () => {
       try {
-        const response = await fetch("http://localhost:3001/admin_super/resumes");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/resumes`, {
+          credentials: "include",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch resumes");
         }
@@ -39,9 +41,9 @@ const ResumeTechwise = () => {
 
   const fetchJobDetails = async (jobTitle) => {
     try {
-      const response = await fetch(`http://localhost:3001/admin_super/jobs?title=${encodeURIComponent(jobTitle)}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/jobs?title=${encodeURIComponent(jobTitle)}`, {
         method: "GET",
-        credentials: "include", // ✅ Important: Ensure authentication credentials are sent
+        credentials: "include",
       });
   
       if (!response.ok) {

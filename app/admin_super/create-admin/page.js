@@ -18,9 +18,10 @@ const CreateAdmin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await fetch("http://localhost:3001/admin_super/admins", {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin_super/admins`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
+      credentials: "include",
       body: JSON.stringify(adminData),
     });
 
@@ -59,7 +60,7 @@ const CreateAdmin = () => {
               className={`w-full p-3 rounded-lg border outline-none transition-all duration-300 focus:ring-2 ${
                 darkMode
                   ? "bg-gray-800 border-gray-700 text-white focus:ring-blue-500"
-                  : "bg-white border-gray-300 text-black focus:ring-blue-600"
+                 : "bg-white border-gray-300 text-black focus:ring-blue-600"
               } ${index % 2 === 0 ? "animate-slide-in-left" : "animate-slide-in-right"}`}
             />
           ))}
