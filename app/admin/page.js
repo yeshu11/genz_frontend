@@ -47,7 +47,7 @@ const AdminDashboard = () => {
   }, [router]);
 
   const handleLogout = () => {
-    fetch("http://localhost:3001/admin/logout", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/logout`, {
       method: "DELETE",
       credentials: "include",
     }).then(() => {
@@ -138,8 +138,8 @@ const AdminDashboard = () => {
                       ? "bg-gray-700"
                       : "bg-gray-200"
                     : darkMode
-                      ? "hover:bg-gray-700"
-                      : "hover:bg-gray-200"
+                    ? "hover:bg-gray-700"
+                    : "hover:bg-gray-200"
                 }`}
               >
                 <Briefcase size={20} color="#7551ff" />
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
                       ? "bg-gray-700"
                       : "bg-gray-200"
                     : darkMode
-                      ? "hover:bg-gray-700"
+                    ? "hover:bg-gray-700"
                     : "hover:bg-gray-200"
                 }`}
               >
@@ -192,8 +192,8 @@ const AdminDashboard = () => {
                       ? "bg-gray-700"
                       : "bg-gray-200"
                     : darkMode
-                      ? "hover:bg-gray-700"
-                      : "hover:bg-gray-200"
+                    ? "hover:bg-gray-700"
+                    : "hover:bg-gray-200"
                 }`}
               >
                 <Trash2 size={20} color="#7551ff" />

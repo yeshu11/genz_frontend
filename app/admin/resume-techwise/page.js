@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import { useDarkMode } from "@/components/DarkModeContext"; // Import Context
 
-
 const ResumeTechwise = () => {
   const [jobResumes, setJobResumes] = useState({});
   const [selectedJob, setSelectedJob] = useState(null);
@@ -11,11 +10,12 @@ const ResumeTechwise = () => {
   const [jobDetails, setJobDetails] = useState({});
   const { darkMode } = useDarkMode(); // Use Global Dark Mode State
 
-
   useEffect(() => {
     const fetchResumes = async () => {
       try {
-        const response = await fetch("http://localhost:3001/resumes");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/resumes`, {
+          credentials: "include",
+        });
         if (!response.ok) {
           throw new Error("Failed to fetch resumes");
         }
@@ -41,7 +41,9 @@ const ResumeTechwise = () => {
 
   const fetchJobDetails = async (jobTitle) => {
     try {
-      const response = await fetch(`http://localhost:3001/jobs?title=${encodeURIComponent(jobTitle)}`);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs?title=${encodeURIComponent(jobTitle)}`, {
+        credentials: "include",
+      });
       if (!response.ok) {
         throw new Error("Failed to fetch job details");
       }
@@ -136,7 +138,6 @@ const ResumeTechwise = () => {
                 </button>
               )}
             </div>
-
 
             <div className="max-h-72 overflow-y-auto border rounded-md mt-6">
               <table className="w-full border-collapse border  shadow-lg text-lg">

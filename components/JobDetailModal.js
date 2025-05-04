@@ -26,7 +26,7 @@ const JobDetailModal = ({ jobId, onClose, refreshJobs }) => {
       console.log(`Fetching job details for jobId: ${jobId}`);
       setLoading(true);
       try {
-        const response = await fetch(`http://localhost:3001/admin/jobs/${jobId}`, {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/jobs/${jobId}`, {
           credentials: "include",
           headers: {
             "Content-Type": "application/json",
@@ -59,7 +59,7 @@ const JobDetailModal = ({ jobId, onClose, refreshJobs }) => {
 
   const handleSaveClick = async () => {
     try {
-      const response = await fetch(`http://localhost:3001/admin/jobs/${jobId}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/jobs/${jobId}`, {
         method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

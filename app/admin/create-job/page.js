@@ -30,7 +30,7 @@ const CreateJob = () => {
     jobData.append("job[status]", formData.status);
     
     try {
-      const response = await fetch("http://localhost:3001/admin/jobs", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/admin/jobs`, {
         method: "POST",
         body: jobData,
         credentials: "include",

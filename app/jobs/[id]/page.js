@@ -15,7 +15,7 @@ const JobDetails = () => {
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const response = await fetch(`http://localhost:3001/jobs/${id}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}`);
         if (!response.ok) {
           throw new Error("Failed to fetch job details");
         }
@@ -47,7 +47,7 @@ const JobDetails = () => {
     formDataObj.append("job_id", id);
 
     try {
-      const response = await fetch(`http://localhost:3001/jobs/${id}/resumes`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}/resumes`, {
         method: "POST",
         body: formDataObj,
       });

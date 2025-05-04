@@ -20,8 +20,9 @@ const JobsPage = () => {
 
   const fetchJobs = async () => {
     try {
-      const response = await axios.get(`http://localhost:3001/jobs`, {
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_API_URL}/jobs`, {
         cache: "no-store",
+        withCredentials: true,
       });
       setJobs(response.data.length > 0 ? response.data : []);
     } catch (error) {
@@ -34,7 +35,9 @@ const JobsPage = () => {
     const confirmDelete = window.confirm("Are you sure you want to delete this job?");
     if (confirmDelete) {
       try {
-        await axios.delete(`http://localhost:3001/jobs/${id}`);
+        await axios.delete(`${process.env.NEXT_PUBLIC_API_URL}/jobs/${id}`, {
+          withCredentials: true,
+        });
         fetchJobs();
       } catch (error) {
         setError("Failed to delete job: " + error.message);
