@@ -15,15 +15,24 @@ export default function Home() {
 
   useEffect(() => {
     let lastScrollY = window.scrollY;
+    let ticking = false;
+
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY) {
-        setScrollDirection("down");
-      } else {
-        setScrollDirection("up");
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          if (window.scrollY > lastScrollY) {
+            setScrollDirection("down");
+          } else {
+            setScrollDirection("up");
+          }
+          lastScrollY = window.scrollY;
+          ticking = false;
+        });
+        ticking = true;
       }
-      lastScrollY = window.scrollY;
     };
-    window.addEventListener("scroll", handleScroll);
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -32,103 +41,35 @@ export default function Home() {
       <Navbar className={scrollDirection === "down" ? "hidden" : "block"} />
 
       {/* Hero Section */}
-      <motion.div
-        className="relative text-black h-[105vh] flex flex-row items-center justify-between bg-custom-gradient px-4 sm:px-6 lg:px-10 hero-section"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-      >
+      <div className="relative text-black h-[100vh] flex flex-row items-center justify-between bg-custom-gradient px-4 sm:px-6 lg:px-10 hero-section">
         <div className="w-full sm:w-3/5 lg:w-2/5 z-10">
-          {/* Laptop Text */}
           <motion.h1
-            className="text-2xl sm:text-3xl lg:text-6xl font-extrabold text-white leading-tight hidden lg:block"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-white leading-tight"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
           >
-            Empowering Businesses
-            <br />
-            with Cutting-Edge IT Solutions
+            Empowering Businesses with Cutting-Edge IT Solutions
           </motion.h1>
           <motion.p
-            className="mt-4 text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed hidden lg:block"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            className="mt-4 text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
           >
-            We bridge the gap between technology
-            <br />
-            and business, delivering innovative
-            <br />
-            solutions that drive growth, efficiency,
-            <br />
-            and success.
-          </motion.p>
-
-          {/* Tablet Text */}
-          <motion.h1
-            className="text-2xl sm:text-4xl lg:text-6xl font-extrabold text-white leading-tight hidden sm:block lg:hidden"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-            Empowering Businesses
-            <br />
-            with Cutting-Edge<br /> IT Solutions
-          </motion.h1>
-          <motion.p
-            className="mt-4 text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed hidden sm:block lg:hidden"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-          >
-            We bridge the gap
-            <br />
-            between technology and business,
-            <br />
-            delivering innovative solutions <br /> that drive growth, efficiency,
-            <br />
-            and success.
-          </motion.p>
-
-          {/* Mobile Text */}
-          <motion.h1
-ក
-            className="text-2xl sm:text-4xl lg:text-9xl font-extrabold text-white leading-tight block sm:hidden"
-            initial={{ opacity: 0, y: -20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-          >
-             Empowering Businesses with 
-              <br />
-              IT Solutions
-            </motion.h1>
-            <motion.p className="mt-1 text-sm sm:text-base lg:text-lg text-gray-200 leading-relaxed block sm:hidden">
-              We bridge the gap
-              between technology<br />&
-              business, delivering innovative
-              solutions.
+            We bridge the gap between technology and business, delivering innovative solutions that drive growth, efficiency, and success.
           </motion.p>
         </div>
 
         <div className="w-[300px] h-[300px] sm:w-[350px] sm:h-[350px] lg:w-[750px] lg:h-[750px] flex-shrink-0 lg:self-end">
           <Hero3DModel />
         </div>
-      </motion.div>
+      </div>
 
-      {/* Portfolio Section */}
       <Services />
-
-      {/* Portfolio Section */}
       <WeServe />
-
-      {/* Portfolio Section */}
       <Portfolio />
-
-      {/* Testimonials Section */}
       <Testimonials />
-
-      {/* About Us Section */}
       <AboutUs />
     </>
   );
