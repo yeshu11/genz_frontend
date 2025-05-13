@@ -36,6 +36,7 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <link rel="icon" href="/Genz_logo.png" sizes="192x192" type="image/png" />
+        <meta name="robots" content="index, follow" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <DarkModeProvider>
