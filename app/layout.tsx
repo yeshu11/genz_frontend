@@ -37,6 +37,17 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/Genz_logo.png" sizes="192x192" type="image/png" />
         <meta name="robots" content="index, follow" />
+        <meta name="googlebot" content="index, follow" />
+        <script type="application/ld+json">
+          {`
+            {
+              "@context": "https://schema.org",
+              "@type": "WebSite",
+              "name": "Genz Developer",
+              "url": "https://genzdeveloper.com"
+            }
+          `}
+        </script>
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <DarkModeProvider>
